@@ -8,7 +8,8 @@ import { GetStaticProps } from "next";
 
 export default function Home(
   {buildTimeStamp, allPostsData}
-  // RfM NOTE that I haven't typed these correctly. Not sure how to do that.
+  // RfM NOTE that I haven't "typed" these correctly. Not sure how to do that.
+  // the prop "home" used in Layout seems to be an intrinsic value, based on "is this the Home page?"
 
   /*
   {
@@ -33,7 +34,7 @@ export default function Home(
           sailor.
         </p>
         <p>
-          (Build Time: {buildTimeStamp} )
+          (Build Time: {buildTimeStamp} UTC)
         </p>
         
         <p>
@@ -58,7 +59,6 @@ export default function Home(
           ))}
         </ul>
         
-          
       </section>
     </Layout>
   );
