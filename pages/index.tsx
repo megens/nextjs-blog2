@@ -99,7 +99,7 @@ export default function Home(
           sailor.
         </p>
         <p>
-          (Build Time: {buildTimeStamp} UTC)
+          (Build Time: {buildTimeStamp} UTC @ production)
         </p>
         
         <p>

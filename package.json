@@ -24,5 +24,20 @@
     "@types/react": "^17.0.0",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.3"
-  }
+  },
+  "description": "This is a starter template for [Learn Next.js](https://nextjs.org/learn).",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/megens/nextjs-blog2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/megens/nextjs-blog2/issues"
+  },
+  "homepage": "https://github.com/megens/nextjs-blog2#readme"
 }
