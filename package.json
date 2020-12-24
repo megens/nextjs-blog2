@@ -9,6 +9,9 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/styles": "^4.11.2",
+    "@types/material-ui": "^0.21.8",
     "date-fns": "^2.16.1",
     "express": "^4.17.1",
     "gray-matter": "^4.0.2",
