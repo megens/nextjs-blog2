@@ -1,6 +1,6 @@
 import "../styles/global.css";
 import { AppProps } from "next/app";
-import { useEffect } from 'react';
+//import { useEffect } from 'react';
 
 /*
 according to 
@@ -16,14 +16,6 @@ https://dev.to/felixmohr/setting-up-a-blog-with-next-js-react-material-ui-and-ty
 By doing this, we allow the client to take over styling the app as soon as its ready.
 
 */
-
-useEffect(() => {
-  const jssStyles = document.querySelector('#jss-server-side')
-  if (jssStyles) {
-    jssStyles.parentElement.removeChild(jssStyles)
-  }
-}, [])
-
 
 export default function App({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />; 
