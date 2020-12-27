@@ -68,7 +68,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Home({ buildTimeStamp, allPostsData }) {
+export default function Home({
+  allPostsData,
+}: {
+  allPostsData: {
+    date: string;
+    title: string;
+    id: string;
+  }[];
+}) {
   // RfM NOTE that I haven't "typed" these correctly. Not sure how to do that.
   // the prop "home" used in Layout seems to be an intrinsic value, based on "is this the Home page?"
 
@@ -93,7 +101,7 @@ export default function Home({ buildTimeStamp, allPostsData }) {
           Hello. I'm Rob. I'm an actuary, coder, blockchain developer and
           sailor.
         </p>
-        <p>(Build Time: {buildTimeStamp} UTC @ production)</p>
+        <p>(Build Time: {"buildTimeStamp"} UTC @ production)</p>
 
         <p>
           (This is a sample website - you’ll be building a site like this in{" "}
