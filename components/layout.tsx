@@ -2,7 +2,7 @@ import Head from "next/head";
 import styles from "./layout.module.css";
 import utilStyles from "../styles/utils.module.css";
 import Link from "next/link";
-import TopBanner from "./ui/TopBanner";
+import Header from "./ui/Header";
 import theme from "./ui/Theme";
 import { ThemeProvider } from "@material-ui/styles";
 
@@ -33,7 +33,7 @@ export default function Layout({
           <meta name="twitter:card" content="summary_large_image" />
         </Head>
 
-        <TopBanner />
+        <Header />
 
         <header className={styles.header}>
           {home ? (

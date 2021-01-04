@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, MouseEvent } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 
@@ -33,7 +33,22 @@ function ElevationScroll(props: any) {
   });
 }
 
+const useStyles = makeStyles((theme) => ({}));
+
 export default function Header(props: any) {
+  const classes = useStyles();
+  const theme = useTheme(); // gives access to default theme in our component
+  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const matches = useMediaQuery(theme.breakpoints.down("md"));
+
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = useState<MouseEvent | null>(null);
+  const [openMenu, setOpenMenu] = useState<boolean>(false);
+
+  const handleChange = (e: Error, newValue: number) => {
+    props.setValue(newValue);
+  };
+
   return (
     <React.Fragment>
       <ElevationScroll>
