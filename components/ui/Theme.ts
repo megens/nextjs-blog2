@@ -80,8 +80,16 @@ const theme = createMuiTheme({
   },
 });
 
-console.log(Object.keys(theme));
 /*
+console.log("Theme keys");
+console.log(Object.keys(theme));
+
+console.log("Theme type");
+console.log(typeof theme);
+
+console.log("Theme mixins");
+console.log(theme.mixins.toolbar);
+
 console.log(theme.palette);
 */
 

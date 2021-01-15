@@ -98,8 +98,8 @@ export default function Home({
       </Head>
       <section className={utilStyles.headingMd}>
         <p>
-          Hello. I'm Rob. I'm an actuary, coder, blockchain developer and
-          sailor.
+          Hello. I'm Rob. I'm a data scientist, qualified actuary, full stack
+          developer, blockchain coder and circumnavigator.
         </p>
         <p>(Build Time: {"buildTimeStamp"} UTC @ production)</p>
 

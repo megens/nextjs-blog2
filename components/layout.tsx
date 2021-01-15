@@ -2,13 +2,13 @@ import Head from "next/head";
 import styles from "./layout.module.css";
 import utilStyles from "../styles/utils.module.css";
 import Link from "next/link";
-import Header from "./ui/Header";
+import MyHeader from "./ui/Header";
 import theme from "./ui/Theme";
 import { ThemeProvider } from "@material-ui/styles";
 
 const name = "Robert M (TypeScript)";
 
-export const siteTitle = "Next.js Sample Website";
+export const siteTitle = "Ockham Actuarial";
 
 export default function Layout({
   children,
@@ -33,7 +33,7 @@ export default function Layout({
           <meta name="twitter:card" content="summary_large_image" />
         </Head>
 
-        <Header />
+        <MyHeader className={styles.myHeader} />
 
         <header className={styles.header}>
           {home ? (
@@ -64,6 +64,7 @@ export default function Layout({
             </>
           )}
         </header>
+
         <main>{children}</main>
         {!home && (
           <div className={styles.backToHome}>
