@@ -48,10 +48,18 @@ const useStyles = makeStyles(theme => ({
 // to defeat TS type widening system, use createStyles
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    appBar: {},
+    logoContainer: {
+      padding: "20px",
+      "&:hover": {
+        backgroundColor: "transparent",
+      }, // avoids slight shade on hover
+    },
     logo: {
       backgroundColor: "primary",
       color: "white",
-      height: "5.5em",
+      height: "9em",
+      borderRadius: "10%",
     },
     toolbarMargin: {
       ...theme.mixins.toolbar,
@@ -113,18 +121,33 @@ export default function Header(props: any) {
   return (
     <React.Fragment>
       <ElevationScroll>
-        <AppBar className={classes.logo} position="fixed" color="primary">
+        <AppBar className={classes.appBar} position="fixed" color="primary">
           <Toolbar disableGutters={true}>
             {
               // Toolbar allows for horizontal layout of components
             }
 
+            <Button
+              disableRipple
+              onClick={() => props.setValue(0)}
+              className={classes.logoContainer}
+            >
+              <img
+                alt="Ockham"
+                className={classes.logo}
+                src="/images/ockhamLogo.png"
+              />
+            </Button>
+
+            {/*
             <img
               src="/images/ockhamLogo.png"
               alt="Ockham"
               width="90"
               height="90"
             />
+            */}
+
             <Typography className={classes.signage} variant="h3">
               Ockham Actuarial
             </Typography>

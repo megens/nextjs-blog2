@@ -19,14 +19,14 @@ export default function createMyTheme(options: ThemeOptions) {
       tab: {
         fontFamily: "Raleway",
         color: "white",
-        fontSize: "1rem",
+        fontSize: "1.125rem",
         fontWeight: 700,
         textTransform: "none",
       },
       contact: {
         fontFamily: "Raleway",
         color: "white",
-        fontSize: "1rem",
+        fontSize: "1.125rem",
         fontWeight: 700,
         textTransform: "none",
       },
