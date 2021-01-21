@@ -6,6 +6,8 @@ import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { useTheme, Theme } from "@material-ui/core/styles";
 
+import Link from "next/link";
+import Router from "next/router";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
@@ -64,7 +66,7 @@ const useStyles = makeStyles((theme: Theme) =>
     toolbarMargin: {
       ...theme.mixins.toolbar,
       //backgroundColor: "black",
-      marginBottom: "1em",
+      marginBottom: "3em",
     },
     signage: {
       color: "white",
@@ -94,7 +96,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Header(props: any) {
+export default function Header() {
+  // RfM: what's the appropriate type for these props? currently using "any", which I don't like
   const classes = useStyles();
   const theme = useTheme(); // gives access to default theme in our component
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -105,11 +108,28 @@ export default function Header(props: any) {
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const [openMenu, setOpenMenu] = useState<boolean>(false);
 
+  const routes = [
+    { name: "Home", link: "/", activeIndex: 0 },
+    {
+      name: "Services",
+      link: "/services",
+      activeIndex: 1,
+      /*
+      ariaOwns: anchorEl ? "simple-menu" : undefined,
+      ariaPopup: anchorEl ? "true" : undefined,
+      mouseOver: (event) => handleClick(event),
+      */
+    },
+    { name: "Approach", link: "/approach", activeIndex: 2 },
+    { name: "Tools", link: "/tools", activeIndex: 3 },
+    { name: "Client Login", link: "/login", activeIndex: 4 },
+    // leaving out Estimate route
+  ];
   const handleChange = (
     event: React.ChangeEvent<{}>,
     newTabValue: number
   ): void => {
-    //props.setTabValue(newTabValue);
+    Router.push(routes[newTabValue].link);
     setTabValue(newTabValue);
   };
 
@@ -117,6 +137,45 @@ export default function Header(props: any) {
     setAnchorEl(e.currentTarget);
     setOpenMenu(true);
   };
+
+  const tabs = (
+    <React.Fragment>
+      <Tabs
+        className={classes.tabContainer}
+        value={tabValue}
+        onChange={handleChange}
+        indicatorColor="primary" // change color of underline to primary (typed as primary|secondary|undefined)
+      >
+        {routes.map((route, index) => (
+          <Tab
+            key={`${route}${index}`}
+            className={classes.tab}
+            label={route.name}
+            /*
+                  aria-owns={route.ariaOwns} // if undefined (for NOT services), does not set property at all
+                  aria-haspopup={route.ariaPopup}
+                  onMouseOver={route.mouseOver}
+                  */
+          />
+        ))}
+      </Tabs>
+    </React.Fragment>
+  );
+  // the following componentDidMount type hook makes sure that active Tab will always be highlighted even if page refreshes
+  //(instead of default Home highlight)
+  useEffect(() => {
+    if (window.location.pathname === "/" && tabValue !== 0) {
+      setTabValue(0);
+    } else if (window.location.pathname === "/services" && tabValue !== 1) {
+      setTabValue(1);
+    } else if (window.location.pathname === "/approach" && tabValue !== 2) {
+      setTabValue(2);
+    } else if (window.location.pathname === "/tools" && tabValue !== 3) {
+      setTabValue(3);
+    } else if (window.location.pathname === "/login" && tabValue !== 4) {
+      setTabValue(4);
+    }
+  }, ["tabValue"]);
 
   return (
     <React.Fragment>
@@ -128,9 +187,12 @@ export default function Header(props: any) {
             }
 
             <Button
-              disableRipple
-              onClick={() => props.setValue(0)}
+              disableRipple // don't like this on a logo
               className={classes.logoContainer}
+              onClick={() => {
+                Router.push(routes[0].link);
+                setTabValue(0);
+              }}
             >
               <img
                 alt="Ockham"
@@ -139,31 +201,10 @@ export default function Header(props: any) {
               />
             </Button>
 
-            {/*
-            <img
-              src="/images/ockhamLogo.png"
-              alt="Ockham"
-              width="90"
-              height="90"
-            />
-            */}
-
             <Typography className={classes.signage} variant="h3">
               Ockham Actuarial
             </Typography>
-            <Tabs
-              className={classes.tabContainer}
-              value={tabValue}
-              //onChange={() => {}}
-              onChange={handleChange}
-              indicatorColor="primary" // change color of underline to primary (typed as primary|secondary|undefined)
-            >
-              <Tab className={classes.tab} label="Home" />
-              <Tab className={classes.tab} label="Services" />
-              <Tab className={classes.tab} label="Approach" />
-              <Tab className={classes.tab} label="Tools" />
-              <Tab className={classes.tab} label="Client Login" />
-            </Tabs>
+            {tabs}
             <Button
               className={classes.contact}
               variant="contained"

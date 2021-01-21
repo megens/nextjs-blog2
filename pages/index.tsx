@@ -118,11 +118,15 @@ export default function Home({
                 <a>{title}</a>
               </Link>
               <br />
+
               <small className={utilStyles.lightText}>
                 <DateComponent dateString={date} />
               </small>
             </li>
           ))}
+          <Link href={`/approach/`}>
+            <a>My Approach</a>
+          </Link>
         </ul>
       </section>
     </Layout>

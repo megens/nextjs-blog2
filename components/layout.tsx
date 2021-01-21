@@ -32,9 +32,13 @@ export default function Layout({
           <meta name="og:title" content={siteTitle} />
           <meta name="twitter:card" content="summary_large_image" />
         </Head>
-
-        <MyHeader className={styles.myHeader} />
-
+        <div className={styles.myHeader}>
+          {
+            //this div is just to contain the className props, in anticipation of further props added to MyHeader
+          }
+          <MyHeader />
+        </div>
+        {/*
         <header className={styles.header}>
           {home ? (
             <>
@@ -64,6 +68,7 @@ export default function Layout({
             </>
           )}
         </header>
+          */}
 
         <main>{children}</main>
         {!home && (
