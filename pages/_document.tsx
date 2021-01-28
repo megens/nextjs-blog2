@@ -11,10 +11,13 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <meta charSet="utf-8" />
+          {/*
           <meta
             name="viewport"
             content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
           />
+          //RfM: this was a bug with the starter template, so upon recommendation, I moved this code to _app.tsx
+          */}
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link
             rel="stylesheet"

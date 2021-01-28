@@ -1,4 +1,4 @@
-import React, { useState, useEffect, MouseEvent } from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -7,7 +7,7 @@ import { makeStyles, createStyles } from "@material-ui/styles";
 import { useTheme, Theme } from "@material-ui/core/styles";
 
 import Link from "next/link";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Button from "@material-ui/core/Button";
@@ -82,6 +82,9 @@ const useStyles = makeStyles((theme: Theme) =>
       ...theme.typography.tab,
       minWidth: 10, // reduce space between tabs
       marginLeft: "25px",
+      // RfM: I added these... are they good?
+      opacity: 0.7,
+      "&:hover": { opacity: 0.9 },
     },
     contact: {
       ...theme.typography.contact,
@@ -93,49 +96,198 @@ const useStyles = makeStyles((theme: Theme) =>
         backgroundColor: theme.palette.secondary.light,
       },
     },
+    menu: {
+      backgroundColor: theme.palette.primary.main,
+      color: theme.palette.common.white,
+    },
+    menuItem: {
+      ...theme.typography.tab,
+      opacity: 0.7,
+      "&:hover": { opacity: 0.9 },
+    },
   })
 );
 
 export default function Header() {
-  // RfM: what's the appropriate type for these props? currently using "any", which I don't like
   const classes = useStyles();
   const theme = useTheme(); // gives access to default theme in our component
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
   const matches = useMediaQuery(theme.breakpoints.down("md"));
-  const [tabValue, setTabValue] = useState<number>(0);
+  const [tabValue, setTabValue] = useState<number | false>(false);
 
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
-  const [anchorEl, setAnchorEl] = useState<Element | null>(null);
-  const [openMenu, setOpenMenu] = useState<boolean>(false);
+  const [anchorElServices, setAnchorElServices] = useState<HTMLElement | null>(
+    null
+  );
+  const [anchorElTools, setAnchorElTools] = useState<HTMLElement | null>(null);
+  const [openMenuServices, setOpenMenuServices] = useState<boolean>(false);
+  const [openMenuTools, setOpenMenuTools] = useState<boolean>(false);
+  const [selectedIndexServices, setSelectedIndexServices] = useState<number>(0);
+  const [selectedIndexTools, setSelectedIndexTools] = useState<number>(0);
 
-  const routes = [
-    { name: "Home", link: "/", activeIndex: 0 },
+  const router = useRouter();
+
+  interface RouteType {
+    name: string;
+    link: string;
+    routeValue: number;
+    activeIndex: number;
+  }
+  const routes: RouteType[] = [
+    { name: "Home", link: "/", routeValue: 0, activeIndex: 0 },
     {
       name: "Services",
       link: "/services",
+      routeValue: 1,
       activeIndex: 1,
       /*
-      ariaOwns: anchorEl ? "simple-menu" : undefined,
+      ariaOwns: anchorEl ? "service-menu" : undefined,
       ariaPopup: anchorEl ? "true" : undefined,
       mouseOver: (event) => handleClick(event),
       */
     },
-    { name: "Approach", link: "/approach", activeIndex: 2 },
-    { name: "Tools", link: "/tools", activeIndex: 3 },
-    { name: "Client Login", link: "/login", activeIndex: 4 },
-    // leaving out Estimate route
+    {
+      name: "Pricing Models",
+      link: "/pricing",
+      routeValue: 1.1,
+      activeIndex: 1,
+    },
+    {
+      name: "Reserving",
+      link: "/reserving",
+      routeValue: 1.2,
+      activeIndex: 1,
+    },
+    {
+      name: "Reinsurance",
+      link: "/reinsurance",
+      routeValue: 1.3,
+      activeIndex: 1,
+    },
+
+    { name: "Tools", link: "/tools", routeValue: 2, activeIndex: 2 },
+    {
+      name: "Iceberg",
+      link: "/iceberg",
+      routeValue: 2.1,
+      activeIndex: 2,
+    },
+    {
+      name: "FlightRisk",
+      link: "/flightrisk",
+      routeValue: 2.2,
+      activeIndex: 2,
+    },
+    {
+      name: "<futureProof/>",
+      link: "/futureproof",
+      routeValue: 2.3,
+      activeIndex: 2,
+    },
+    { name: "Client Login", link: "/login", routeValue: 3, activeIndex: 3 },
   ];
+
+  const menuServiceOptions = [
+    { name: "Services", link: "/services", activeIndex: 1, selectedIndex: 0 },
+    {
+      name: "Pricing Models",
+      link: "/pricing",
+      activeIndex: 1,
+      selectedIndex: 1,
+    },
+    {
+      name: "Reserving",
+      link: "/reserving",
+      activeIndex: 1,
+      selectedIndex: 2,
+    },
+    {
+      name: "Reinsurance",
+      link: "/reinsurance",
+      activeIndex: 1,
+      selectedIndex: 3,
+    },
+  ];
+
+  const menuToolOptions = [
+    { name: "Tools", link: "/tools", activeIndex: 2, selectedIndex: 0 },
+    {
+      name: "Iceberg",
+      link: "/iceberg",
+      activeIndex: 2,
+      selectedIndex: 1,
+    },
+    {
+      name: "FlightRisk",
+      link: "/flightrisk",
+      activeIndex: 2,
+      selectedIndex: 2,
+    },
+    {
+      name: "<futureProof/>",
+      link: "/futureproof",
+      activeIndex: 2,
+      selectedIndex: 3,
+    },
+  ];
+
   const handleChange = (
     event: React.ChangeEvent<{}>,
     newTabValue: number
   ): void => {
-    Router.push(routes[newTabValue].link);
-    setTabValue(newTabValue);
+    console.log("newTabValue is" + newTabValue);
+    let targetRoute: RouteType | undefined = routes.find((route) => {
+      return route.routeValue === newTabValue;
+    });
+    if (targetRoute === undefined) {
+      router.push("/404");
+      setTabValue(false);
+    } else {
+      router.push(targetRoute.link);
+      //setTabValue(Math.floor(targetRoute.routeValue));
+      setTabValue(false);
+    }
+    //router.push(routes[newTabValue].link);
   };
 
-  const handleClick = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setAnchorEl(e.currentTarget);
-    setOpenMenu(true);
+  const handleClickServices = (
+    e: React.MouseEvent<HTMLElement> | React.ChangeEvent<HTMLElement>
+  ): void => {
+    // was (e: React.ChangeEvent<HTMLInputElement>):
+    setAnchorElServices(e.currentTarget);
+    setOpenMenuServices(true);
+  };
+
+  const handleClickTools = (
+    e: React.MouseEvent<HTMLElement> | React.ChangeEvent<HTMLElement>
+  ): void => {
+    // was (e: React.ChangeEvent<HTMLInputElement>):
+    setAnchorElTools(e.currentTarget);
+    setOpenMenuTools(true);
+  };
+
+  const handleMenuItemClickServices = (
+    e: React.MouseEvent,
+    i: number
+  ): void => {
+    setAnchorElServices(null); // menu goes away
+    setOpenMenuServices(false);
+    setSelectedIndexServices(i);
+    console.log("set selectedIndex to: " + i);
+  };
+
+  const handleMenuItemClickTools = (e: React.MouseEvent, i: number): void => {
+    setAnchorElTools(null); // menu goes away
+    setOpenMenuTools(false);
+    setSelectedIndexTools(i);
+    console.log("set selectedIndex to: " + i);
+  };
+
+  const handleClose = (): void => {
+    setAnchorElServices(null);
+    setAnchorElTools(null);
+    setOpenMenuServices(false);
+    setOpenMenuTools(false);
   };
 
   const tabs = (
@@ -161,12 +313,34 @@ export default function Header() {
       </Tabs>
     </React.Fragment>
   );
+
+  useEffect(() => {
+    let currentLinkIndex: number | undefined = routes.find(
+      (route) => route.link === window.location.pathname
+    )?.activeIndex;
+    if (currentLinkIndex === undefined) {
+      setTabValue(false);
+    } else {
+      if (tabValue !== currentLinkIndex) {
+        setTabValue(currentLinkIndex);
+      }
+    }
+  }, ["tabValue"]);
+
   // the following componentDidMount type hook makes sure that active Tab will always be highlighted even if page refreshes
   //(instead of default Home highlight)
+  /*
   useEffect(() => {
+    console.log("useEffect tabValue is " + tabValue);
     if (window.location.pathname === "/" && tabValue !== 0) {
       setTabValue(0);
-    } else if (window.location.pathname === "/services" && tabValue !== 1) {
+    } else if (
+      (window.location.pathname === "/services" ||
+        window.location.pathname === "/pricing" ||
+        window.location.pathname === "/reserving" ||
+        window.location.pathname === "/reinsurance") &&
+      tabValue !== 1
+    ) {
       setTabValue(1);
     } else if (window.location.pathname === "/approach" && tabValue !== 2) {
       setTabValue(2);
@@ -176,6 +350,7 @@ export default function Header() {
       setTabValue(4);
     }
   }, ["tabValue"]);
+  */
 
   return (
     <React.Fragment>
@@ -190,7 +365,7 @@ export default function Header() {
               disableRipple // don't like this on a logo
               className={classes.logoContainer}
               onClick={() => {
-                Router.push(routes[0].link);
+                router.push(routes[0].link);
                 setTabValue(0);
               }}
             >
@@ -202,9 +377,39 @@ export default function Header() {
             </Button>
 
             <Typography className={classes.signage} variant="h3">
-              Ockham Actuarial
+              f
             </Typography>
-            {tabs}
+            <Typography className={classes.signage} variant="body1">
+              tab value = {tabValue} and index value = {selectedIndexServices}
+            </Typography>
+
+            <Tabs
+              className={classes.tabContainer}
+              value={tabValue}
+              onChange={handleChange}
+              indicatorColor="primary"
+            >
+              <Tab className={classes.tab} label="Home" />
+
+              <Tab
+                className={classes.tab}
+                label="Services"
+                aria-owns={anchorElServices ? "service-menu" : undefined} // if undefined (for NOT services), does not set property at all
+                aria-haspopup={anchorElServices ? true : undefined}
+                onMouseOver={(event) => handleClickServices(event)}
+                //  onMouseOver={route.mouseOver}
+              />
+
+              <Tab
+                className={classes.tab}
+                label="Tools"
+                aria-owns={anchorElTools ? "tools-menu" : undefined} // if undefined (for NOT services), does not set property at all
+                aria-haspopup={anchorElTools ? true : undefined}
+                onMouseOver={(event) => handleClickTools(event)}
+              />
+              <Tab className={classes.tab} label="Client Login" />
+            </Tabs>
+
             <Button
               className={classes.contact}
               variant="contained"
@@ -213,6 +418,69 @@ export default function Header() {
             >
               Contact
             </Button>
+
+            <Menu
+              id="service-menu"
+              anchorEl={anchorElServices}
+              getContentAnchorEl={null}
+              // https://stackoverflow.com/questions/48157863/how-to-make-a-dropdown-menu-open-below-the-appbar-using-material-ui
+              open={openMenuServices}
+              onClose={handleClose}
+              MenuListProps={{
+                onMouseLeave: handleClose,
+                // to close Menu (openMenu handled by Tab hover, closeMenu by onMouseLeave on Menu list component )
+              }}
+              classes={{ paper: classes.menu }}
+              elevation={0}
+            >
+              {menuServiceOptions.map((option, i) => (
+                <MenuItem
+                  key={i}
+                  onClick={(e: React.MouseEvent): void => {
+                    //router.push(option.link);
+                    handleChange(e, 1 + i / 10);
+                    handleMenuItemClickServices(e, i);
+                    handleClose();
+                    setTabValue(1);
+                  }}
+                  classes={{ root: classes.menuItem }}
+                  selected={i === selectedIndexServices}
+                >
+                  {option.name}
+                </MenuItem>
+              ))}
+            </Menu>
+
+            <Menu
+              id="tools-menu"
+              anchorEl={anchorElTools}
+              getContentAnchorEl={null}
+              open={openMenuTools}
+              onClose={handleClose}
+              MenuListProps={{
+                onMouseLeave: handleClose,
+                // to close Menu (openMenu handled by Tab hover, closeMenu by onMouseLeave on Menu list component )
+              }}
+              classes={{ paper: classes.menu }}
+              elevation={0}
+            >
+              {menuToolOptions.map((option, i) => (
+                <MenuItem
+                  key={i}
+                  onClick={(e: React.MouseEvent): void => {
+                    //router.push(option.link);
+                    handleChange(e, 2 + i / 10);
+                    handleMenuItemClickTools(e, i);
+                    handleClose();
+                    setTabValue(2);
+                  }}
+                  classes={{ root: classes.menuItem }}
+                  selected={i === selectedIndexTools}
+                >
+                  {option.name}
+                </MenuItem>
+              ))}
+            </Menu>
           </Toolbar>
         </AppBar>
       </ElevationScroll>
