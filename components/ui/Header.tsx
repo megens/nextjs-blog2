@@ -131,113 +131,90 @@ export default function Header() {
     name: string;
     link: string;
     routeValue: number;
-    activeIndex: number;
+    tabValue: number;
+    branchValue?: number;
+    ariaOwns?: string | undefined;
+    ariaPopup?: boolean | "true" | "false" | undefined;
+    mouseOver?: { (event: React.MouseEvent<HTMLElement>): void };
   }
   const routes: RouteType[] = [
-    { name: "Home", link: "/", routeValue: 0, activeIndex: 0 },
+    { name: "Home", link: "/", routeValue: 0, tabValue: 0 },
     {
       name: "Services",
       link: "/services",
       routeValue: 1,
-      activeIndex: 1,
-      /*
-      ariaOwns: anchorEl ? "service-menu" : undefined,
-      ariaPopup: anchorEl ? "true" : undefined,
-      mouseOver: (event) => handleClick(event),
-      */
+      tabValue: 1,
+      ariaOwns: anchorElServices ? "service-menu" : undefined,
+      ariaPopup: anchorElServices ? "true" : undefined,
+      mouseOver: (event: React.MouseEvent<HTMLElement>) =>
+        handleHoverServices(event),
     },
     {
       name: "Pricing Models",
       link: "/pricing",
       routeValue: 1.1,
-      activeIndex: 1,
+      tabValue: 1,
+      branchValue: 1,
     },
     {
       name: "Reserving",
       link: "/reserving",
       routeValue: 1.2,
-      activeIndex: 1,
+      tabValue: 1,
+      branchValue: 2,
     },
     {
       name: "Reinsurance",
       link: "/reinsurance",
       routeValue: 1.3,
-      activeIndex: 1,
+      tabValue: 1,
+      branchValue: 3,
     },
 
-    { name: "Tools", link: "/tools", routeValue: 2, activeIndex: 2 },
+    {
+      name: "Tools",
+      link: "/tools",
+      routeValue: 2,
+      tabValue: 2,
+      ariaOwns: anchorElTools ? "service-menu" : undefined,
+      ariaPopup: anchorElTools ? "true" : undefined,
+      mouseOver: (event: React.MouseEvent<HTMLElement>) =>
+        handleHoverTools(event),
+    },
     {
       name: "Iceberg",
       link: "/iceberg",
       routeValue: 2.1,
-      activeIndex: 2,
+      tabValue: 2,
+      branchValue: 1,
     },
     {
       name: "FlightRisk",
       link: "/flightrisk",
       routeValue: 2.2,
-      activeIndex: 2,
+      tabValue: 2,
+      branchValue: 2,
     },
     {
       name: "<futureProof/>",
       link: "/futureproof",
       routeValue: 2.3,
-      activeIndex: 2,
+      tabValue: 2,
+      branchValue: 3,
     },
-    { name: "Client Login", link: "/login", routeValue: 3, activeIndex: 3 },
+    { name: "Client Login", link: "/login", routeValue: 3, tabValue: 3 },
   ];
 
-  const menuServiceOptions = [
-    { name: "Services", link: "/services", activeIndex: 1, selectedIndex: 0 },
-    {
-      name: "Pricing Models",
-      link: "/pricing",
-      activeIndex: 1,
-      selectedIndex: 1,
-    },
-    {
-      name: "Reserving",
-      link: "/reserving",
-      activeIndex: 1,
-      selectedIndex: 2,
-    },
-    {
-      name: "Reinsurance",
-      link: "/reinsurance",
-      activeIndex: 1,
-      selectedIndex: 3,
-    },
-  ];
-
-  const menuToolOptions = [
-    { name: "Tools", link: "/tools", activeIndex: 2, selectedIndex: 0 },
-    {
-      name: "Iceberg",
-      link: "/iceberg",
-      activeIndex: 2,
-      selectedIndex: 1,
-    },
-    {
-      name: "FlightRisk",
-      link: "/flightrisk",
-      activeIndex: 2,
-      selectedIndex: 2,
-    },
-    {
-      name: "<futureProof/>",
-      link: "/futureproof",
-      activeIndex: 2,
-      selectedIndex: 3,
-    },
-  ];
+  const menuServiceOptions = routes.filter((route) => route.tabValue === 1);
+  const menuToolOptions = routes.filter((route) => route.tabValue === 2);
 
   const handleChange = (
     event: React.ChangeEvent<{}>,
-    newTabValue: number
+    newRouteValue: number
   ): void => {
-    console.log("newTabValue is" + newTabValue);
+    //console.log("newTabValue is" + newTabValue);
     let targetRoute: RouteType | undefined = routes.find((route) => {
-      return route.routeValue === newTabValue;
+      return route.routeValue === newRouteValue;
     });
     if (targetRoute === undefined) {
       router.push("/404");
@@ -245,12 +222,12 @@ export default function Header() {
     } else {
       router.push(targetRoute.link);
       //setTabValue(Math.floor(targetRoute.routeValue));
-      setTabValue(false);
+      setTabValue(targetRoute.tabValue);
     }
     //router.push(routes[newTabValue].link);
   };
 
-  const handleClickServices = (
+  const handleHoverServices = (
     e: React.MouseEvent<HTMLElement> | React.ChangeEvent<HTMLElement>
   ): void => {
     // was (e: React.ChangeEvent<HTMLInputElement>):
@@ -258,7 +235,7 @@ export default function Header() {
     setOpenMenuServices(true);
   };
 
-  const handleClickTools = (
+  const handleHoverTools = (
     e: React.MouseEvent<HTMLElement> | React.ChangeEvent<HTMLElement>
   ): void => {
     // was (e: React.ChangeEvent<HTMLInputElement>):
@@ -298,69 +275,57 @@ export default function Header() {
         onChange={handleChange}
         indicatorColor="primary" // change color of underline to primary (typed as primary|secondary|undefined)
       >
-        {routes.map((route, index) => (
-          <Tab
-            key={`${route}${index}`}
-            className={classes.tab}
-            label={route.name}
-            /*
-                  aria-owns={route.ariaOwns} // if undefined (for NOT services), does not set property at all
-                  aria-haspopup={route.ariaPopup}
-                  onMouseOver={route.mouseOver}
-                  */
-          />
-        ))}
+        {routes
+          .filter((route) => route.branchValue === undefined)
+          .map((route, index) => (
+            <Tab
+              key={`${route}${index}`}
+              className={classes.tab}
+              label={route.name}
+              aria-owns={route.ariaOwns} // if undefined (for NOT services), does not set property at all
+              aria-haspopup={route.ariaPopup}
+              onMouseOver={route.mouseOver}
+            />
+          ))}
       </Tabs>
     </React.Fragment>
   );
 
   useEffect(() => {
-    let currentLinkIndex: number | undefined = routes.find(
+    // the following componentDidMount type hook makes ensures active Tab will always be highlighted even if page refreshes
+    //(instead of default Home highlight). Comlicated because NextJS refreshes on every router.push()
+
+    let currentRoute: RouteType | undefined = routes.find(
       (route) => route.link === window.location.pathname
-    )?.activeIndex;
-    if (currentLinkIndex === undefined) {
+    );
+    if (currentRoute === undefined) {
       setTabValue(false);
+      setSelectedIndexServices(0);
+      setSelectedIndexTools(0);
     } else {
-      if (tabValue !== currentLinkIndex) {
-        setTabValue(currentLinkIndex);
+      setTabValue(currentRoute.tabValue);
+      if (
+        currentRoute.tabValue === 1 &&
+        currentRoute.branchValue !== undefined
+      ) {
+        setSelectedIndexServices(currentRoute.branchValue);
+        setSelectedIndexTools(0);
+      }
+      if (
+        currentRoute.tabValue === 2 &&
+        currentRoute.branchValue !== undefined
+      ) {
+        setSelectedIndexServices(0);
+        setSelectedIndexTools(currentRoute.branchValue);
       }
     }
-  }, ["tabValue"]);
-
-  // the following componentDidMount type hook makes sure that active Tab will always be highlighted even if page refreshes
-  //(instead of default Home highlight)
-  /*
-  useEffect(() => {
-    console.log("useEffect tabValue is " + tabValue);
-    if (window.location.pathname === "/" && tabValue !== 0) {
-      setTabValue(0);
-    } else if (
-      (window.location.pathname === "/services" ||
-        window.location.pathname === "/pricing" ||
-        window.location.pathname === "/reserving" ||
-        window.location.pathname === "/reinsurance") &&
-      tabValue !== 1
-    ) {
-      setTabValue(1);
-    } else if (window.location.pathname === "/approach" && tabValue !== 2) {
-      setTabValue(2);
-    } else if (window.location.pathname === "/tools" && tabValue !== 3) {
-      setTabValue(3);
-    } else if (window.location.pathname === "/login" && tabValue !== 4) {
-      setTabValue(4);
-    }
-  }, ["tabValue"]);
-  */
+  }, ["tabValue", "selectedIndexServices", "selectedIndexTools"]);
 
   return (
     <React.Fragment>
       <ElevationScroll>
         <AppBar className={classes.appBar} position="fixed" color="primary">
           <Toolbar disableGutters={true}>
-            {
-              // Toolbar allows for horizontal layout of components
-            }
-
             <Button
               disableRipple // don't like this on a logo
               className={classes.logoContainer}
@@ -380,35 +345,11 @@ export default function Header() {
               f
             </Typography>
             <Typography className={classes.signage} variant="body1">
-              tab value = {tabValue} and index value = {selectedIndexServices}
+              tab value = {tabValue} and index value = {selectedIndexServices}{" "}
+              and {selectedIndexTools}
             </Typography>
 
-            <Tabs
-              className={classes.tabContainer}
-              value={tabValue}
-              onChange={handleChange}
-              indicatorColor="primary"
-            >
-              <Tab className={classes.tab} label="Home" />
-
-              <Tab
-                className={classes.tab}
-                label="Services"
-                aria-owns={anchorElServices ? "service-menu" : undefined} // if undefined (for NOT services), does not set property at all
-                aria-haspopup={anchorElServices ? true : undefined}
-                onMouseOver={(event) => handleClickServices(event)}
-                //  onMouseOver={route.mouseOver}
-              />
-
-              <Tab
-                className={classes.tab}
-                label="Tools"
-                aria-owns={anchorElTools ? "tools-menu" : undefined} // if undefined (for NOT services), does not set property at all
-                aria-haspopup={anchorElTools ? true : undefined}
-                onMouseOver={(event) => handleClickTools(event)}
-              />
-              <Tab className={classes.tab} label="Client Login" />
-            </Tabs>
+            {tabs}
 
             <Button
               className={classes.contact}
@@ -437,14 +378,13 @@ export default function Header() {
                 <MenuItem
                   key={i}
                   onClick={(e: React.MouseEvent): void => {
-                    //router.push(option.link);
-                    handleChange(e, 1 + i / 10);
+                    handleChange(e, option.routeValue);
                     handleMenuItemClickServices(e, i);
                     handleClose();
-                    setTabValue(1);
+                    setTabValue(option.routeValue);
                   }}
                   classes={{ root: classes.menuItem }}
-                  selected={i === selectedIndexServices}
+                  selected={i === selectedIndexServices} //selectedIndexServices}
                 >
                   {option.name}
                 </MenuItem>
@@ -469,10 +409,10 @@ export default function Header() {
                   key={i}
                   onClick={(e: React.MouseEvent): void => {
                     //router.push(option.link);
-                    handleChange(e, 2 + i / 10);
+                    handleChange(e, option.routeValue);
                     handleMenuItemClickTools(e, i);
                     handleClose();
-                    setTabValue(2);
+                    setTabValue(option.routeValue);
                   }}
                   classes={{ root: classes.menuItem }}
                   selected={i === selectedIndexTools}
