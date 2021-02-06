@@ -36,8 +36,8 @@ export default function Layout({
           {
             //this div is just to contain the className props, in anticipation of further props added to MyHeader
           }
-          <MyHeader />
         </div>
+        <MyHeader />
         {/*
         <header className={styles.header}>
           {home ? (

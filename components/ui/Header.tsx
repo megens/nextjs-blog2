@@ -15,8 +15,8 @@ import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-
 import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import List from "@material-ui/core/List";
@@ -51,6 +51,17 @@ const useStyles = makeStyles(theme => ({
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     appBar: {},
+    toolbarMargin: {
+      ...theme.mixins.toolbar,
+      //backgroundColor: "black",
+      marginBottom: "3em",
+      [theme.breakpoints.down("md")]: {
+        marginBottom: "2em",
+      },
+      [theme.breakpoints.down("xs")]: {
+        marginBottom: "1.25em",
+      },
+    },
     logoContainer: {
       padding: "20px",
       "&:hover": {
@@ -60,14 +71,16 @@ const useStyles = makeStyles((theme: Theme) =>
     logo: {
       backgroundColor: "primary",
       color: "white",
-      height: "9em",
       borderRadius: "10%",
+      height: "9em",
+      [theme.breakpoints.down("md")]: {
+        height: "7em",
+      },
+      [theme.breakpoints.down("xs")]: {
+        height: "5.5em",
+      },
     },
-    toolbarMargin: {
-      ...theme.mixins.toolbar,
-      //backgroundColor: "black",
-      marginBottom: "3em",
-    },
+
     signage: {
       color: "white",
       //color: theme.palette.common.black,
@@ -105,6 +118,32 @@ const useStyles = makeStyles((theme: Theme) =>
       opacity: 0.7,
       "&:hover": { opacity: 0.9 },
     },
+    drawerIconContainer: {
+      marginLeft: "auto",
+      "&:hover": {
+        backgroundColor: "transparent",
+      },
+    },
+    drawerIcon: {
+      height: "50px",
+      width: "50px",
+    },
+    drawer: {
+      backgroundColor: theme.palette.primary.main,
+    },
+    drawerItem: {
+      ...theme.typography.tab,
+      color: "white",
+      opacity: 0.7,
+    },
+    drawerItemSelected: {
+      "& .MuiListItemText-root": {
+        opacity: 1,
+      },
+    },
+    drawerItemSpecial: {
+      backgroundColor: theme.palette.secondary.main,
+    },
   })
 );
 
@@ -113,8 +152,8 @@ export default function Header() {
   const theme = useTheme(); // gives access to default theme in our component
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
   const matches = useMediaQuery(theme.breakpoints.down("md"));
-  const [tabValue, setTabValue] = useState<number | false>(false);
 
+  const [tabValue, setTabValue] = useState<number | false>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [anchorElServices, setAnchorElServices] = useState<HTMLElement | null>(
     null
@@ -196,11 +235,18 @@ export default function Header() {
       branchValue: 2,
     },
     {
-      name: "<futureProof/>",
-      link: "/futureproof",
+      name: "DataBarrier",
+      link: "/databarrier",
       routeValue: 2.3,
       tabValue: 2,
       branchValue: 3,
+    },
+    {
+      name: "<futureProof/>",
+      link: "/futureproof",
+      routeValue: 2.4,
+      tabValue: 2,
+      branchValue: 4,
     },
     { name: "Client Login", link: "/login", routeValue: 3, tabValue: 3 },
   ];
@@ -267,30 +313,6 @@ export default function Header() {
     setOpenMenuTools(false);
   };
 
-  const tabs = (
-    <React.Fragment>
-      <Tabs
-        className={classes.tabContainer}
-        value={tabValue}
-        onChange={handleChange}
-        indicatorColor="primary" // change color of underline to primary (typed as primary|secondary|undefined)
-      >
-        {routes
-          .filter((route) => route.branchValue === undefined)
-          .map((route, index) => (
-            <Tab
-              key={`${route}${index}`}
-              className={classes.tab}
-              label={route.name}
-              aria-owns={route.ariaOwns} // if undefined (for NOT services), does not set property at all
-              aria-haspopup={route.ariaPopup}
-              onMouseOver={route.mouseOver}
-            />
-          ))}
-      </Tabs>
-    </React.Fragment>
-  );
-
   useEffect(() => {
     // the following componentDidMount type hook makes ensures active Tab will always be highlighted even if page refreshes
     //(instead of default Home highlight). Comlicated because NextJS refreshes on every router.push()
@@ -321,6 +343,166 @@ export default function Header() {
     }
   }, ["tabValue", "selectedIndexServices", "selectedIndexTools"]);
 
+  const tabs = (
+    <React.Fragment>
+      <Tabs
+        className={classes.tabContainer}
+        value={tabValue}
+        onChange={handleChange}
+        indicatorColor="primary" // change color of underline to primary (typed as primary|secondary|undefined)
+      >
+        {routes
+          .filter((route) => route.branchValue === undefined)
+          .map((route, index) => (
+            <Tab
+              key={`${route}${index}`}
+              className={classes.tab}
+              label={route.name}
+              aria-owns={route.ariaOwns} // if undefined (for NOT services), does not set property at all
+              aria-haspopup={route.ariaPopup}
+              onMouseOver={route.mouseOver}
+            />
+          ))}
+      </Tabs>
+      <Button
+        className={classes.contact}
+        variant="contained"
+        color="secondary"
+        onClick={() => {
+          router.push("/contact");
+          setTabValue(false);
+        }}
+      >
+        Contact
+      </Button>
+
+      <Menu
+        id="service-menu"
+        anchorEl={anchorElServices}
+        getContentAnchorEl={null}
+        // https://stackoverflow.com/questions/48157863/how-to-make-a-dropdown-menu-open-below-the-appbar-using-material-ui
+        open={openMenuServices}
+        onClose={handleClose}
+        MenuListProps={{
+          onMouseLeave: handleClose,
+          // to close Menu (openMenu handled by Tab hover, closeMenu by onMouseLeave on Menu list component )
+        }}
+        classes={{ paper: classes.menu }}
+        elevation={0}
+      >
+        {menuServiceOptions.map((option, i) => (
+          <MenuItem
+            key={i}
+            onClick={(e: React.MouseEvent): void => {
+              handleChange(e, option.routeValue);
+              handleMenuItemClickServices(e, i);
+              handleClose();
+              setTabValue(option.routeValue);
+            }}
+            classes={{ root: classes.menuItem }}
+            selected={i === selectedIndexServices} //selectedIndexServices}
+          >
+            {option.name}
+          </MenuItem>
+        ))}
+      </Menu>
+
+      <Menu
+        id="tools-menu"
+        anchorEl={anchorElTools}
+        getContentAnchorEl={null}
+        open={openMenuTools}
+        onClose={handleClose}
+        MenuListProps={{
+          onMouseLeave: handleClose,
+          // to close Menu (openMenu handled by Tab hover, closeMenu by onMouseLeave on Menu list component )
+        }}
+        classes={{ paper: classes.menu }}
+        elevation={0}
+      >
+        {menuToolOptions.map((option, i) => (
+          <MenuItem
+            key={i}
+            onClick={(e: React.MouseEvent): void => {
+              //router.push(option.link);
+              handleChange(e, option.routeValue);
+              handleMenuItemClickTools(e, i);
+              handleClose();
+              setTabValue(option.routeValue);
+            }}
+            classes={{ root: classes.menuItem }}
+            selected={i === selectedIndexTools}
+          >
+            {option.name}
+          </MenuItem>
+        ))}
+      </Menu>
+    </React.Fragment>
+  );
+
+  const drawer = (
+    <React.Fragment>
+      <SwipeableDrawer
+        disableBackdropTransition={!iOS}
+        disableDiscovery={iOS}
+        open={openDrawer}
+        onClose={() => setOpenDrawer(false)}
+        onOpen={() => setOpenDrawer(true)}
+        classes={{ paper: classes.drawer }}
+      >
+        <List disablePadding>
+          {routes
+            .filter((route) => route.branchValue === undefined)
+            .map((route, index) => (
+              <ListItem
+                key={`${route}${index}`}
+                divider
+                button
+                classes={{ selected: classes.drawerItemSelected }}
+                selected={tabValue === route.routeValue}
+                onClick={(e: React.MouseEvent): void => {
+                  setOpenDrawer(false);
+                  handleChange(e, route.routeValue);
+                  setTabValue(route.routeValue);
+                }}
+              >
+                <ListItemText className={classes.drawerItem} disableTypography>
+                  {route.name}
+                </ListItemText>
+              </ListItem>
+            ))}
+          <ListItem
+            onClick={() => {
+              setOpenDrawer(false);
+              router.push("/contact");
+              setTabValue(false);
+            }}
+            divider
+            button
+            //component={Link}
+            classes={{
+              root: classes.drawerItemSpecial,
+              selected: classes.drawerItemSelected,
+            }}
+            //to="/estimate"
+            //selected={props.value === 5}
+          >
+            <ListItemText className={classes.drawerItem} disableTypography>
+              Contact
+            </ListItemText>
+          </ListItem>
+        </List>
+      </SwipeableDrawer>
+      <IconButton
+        className={classes.drawerIconContainer}
+        onClick={() => setOpenDrawer(!openDrawer)}
+        disableRipple
+      >
+        <MenuIcon className={classes.drawerIcon} />
+      </IconButton>
+    </React.Fragment>
+  );
+
   return (
     <React.Fragment>
       <ElevationScroll>
@@ -341,86 +523,16 @@ export default function Header() {
               />
             </Button>
 
-            <Typography className={classes.signage} variant="h3">
-              f
+            <Typography className={classes.signage} variant="h4">
+              Ockham Actuarial
             </Typography>
+            {/*
             <Typography className={classes.signage} variant="body1">
               tab value = {tabValue} and index value = {selectedIndexServices}{" "}
               and {selectedIndexTools}
             </Typography>
-
-            {tabs}
-
-            <Button
-              className={classes.contact}
-              variant="contained"
-              color="secondary"
-              onClick={() => {}}
-            >
-              Contact
-            </Button>
-
-            <Menu
-              id="service-menu"
-              anchorEl={anchorElServices}
-              getContentAnchorEl={null}
-              // https://stackoverflow.com/questions/48157863/how-to-make-a-dropdown-menu-open-below-the-appbar-using-material-ui
-              open={openMenuServices}
-              onClose={handleClose}
-              MenuListProps={{
-                onMouseLeave: handleClose,
-                // to close Menu (openMenu handled by Tab hover, closeMenu by onMouseLeave on Menu list component )
-              }}
-              classes={{ paper: classes.menu }}
-              elevation={0}
-            >
-              {menuServiceOptions.map((option, i) => (
-                <MenuItem
-                  key={i}
-                  onClick={(e: React.MouseEvent): void => {
-                    handleChange(e, option.routeValue);
-                    handleMenuItemClickServices(e, i);
-                    handleClose();
-                    setTabValue(option.routeValue);
-                  }}
-                  classes={{ root: classes.menuItem }}
-                  selected={i === selectedIndexServices} //selectedIndexServices}
-                >
-                  {option.name}
-                </MenuItem>
-              ))}
-            </Menu>
-
-            <Menu
-              id="tools-menu"
-              anchorEl={anchorElTools}
-              getContentAnchorEl={null}
-              open={openMenuTools}
-              onClose={handleClose}
-              MenuListProps={{
-                onMouseLeave: handleClose,
-                // to close Menu (openMenu handled by Tab hover, closeMenu by onMouseLeave on Menu list component )
-              }}
-              classes={{ paper: classes.menu }}
-              elevation={0}
-            >
-              {menuToolOptions.map((option, i) => (
-                <MenuItem
-                  key={i}
-                  onClick={(e: React.MouseEvent): void => {
-                    //router.push(option.link);
-                    handleChange(e, option.routeValue);
-                    handleMenuItemClickTools(e, i);
-                    handleClose();
-                    setTabValue(option.routeValue);
-                  }}
-                  classes={{ root: classes.menuItem }}
-                  selected={i === selectedIndexTools}
-                >
-                  {option.name}
-                </MenuItem>
-              ))}
-            </Menu>
+            */}
+            {matches ? drawer : tabs}
           </Toolbar>
         </AppBar>
       </ElevationScroll>
