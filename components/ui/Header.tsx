@@ -6,7 +6,7 @@ import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { useTheme, Theme } from "@material-ui/core/styles";
 
-import Link from "next/link";
+//import Link from "next/link";
 import { useRouter } from "next/router";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -22,8 +22,6 @@ import MenuIcon from "@material-ui/icons/Menu";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-
-// unstaged change
 
 interface Props {
   children: React.ReactElement;
@@ -50,16 +48,19 @@ const useStyles = makeStyles(theme => ({
 // to defeat TS type widening system, use createStyles
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    appBar: {},
+    appBar: {
+      zIndex: theme.zIndex.modal + 1,
+    },
     toolbarMargin: {
       ...theme.mixins.toolbar,
-      //backgroundColor: "black",
-      marginBottom: "3em",
+      height: "10.5em",
+      //marginBottom: "7em",
       [theme.breakpoints.down("md")]: {
-        marginBottom: "2em",
+        height: "9em", // switched to adjusting height rather than marginBottom because overlap of margins is permitted and was messing up my layout.
+        //marginBottom: "0em",
       },
       [theme.breakpoints.down("xs")]: {
-        marginBottom: "1.25em",
+        height: "7.5em",
       },
     },
     logoContainer: {
@@ -74,7 +75,7 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: "10%",
       height: "9em",
       [theme.breakpoints.down("md")]: {
-        height: "7em",
+        height: "7.5em", // was 7.5
       },
       [theme.breakpoints.down("xs")]: {
         height: "5.5em",
@@ -148,10 +149,11 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function Header() {
+  const router = useRouter();
   const classes = useStyles();
   const theme = useTheme(); // gives access to default theme in our component
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const matches = useMediaQuery(theme.breakpoints.down("md"));
+  const matches = useMediaQuery(theme.breakpoints.down("md")); //RFM: CHANGE TO md
 
   const [tabValue, setTabValue] = useState<number | false>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
@@ -163,8 +165,6 @@ export default function Header() {
   const [openMenuTools, setOpenMenuTools] = useState<boolean>(false);
   const [selectedIndexServices, setSelectedIndexServices] = useState<number>(0);
   const [selectedIndexTools, setSelectedIndexTools] = useState<number>(0);
-
-  const router = useRouter();
 
   interface RouteType {
     name: string;
@@ -389,6 +389,7 @@ export default function Header() {
         }}
         classes={{ paper: classes.menu }}
         elevation={0}
+        style={{ zIndex: 1302 }} // 1 above app bar? so it won't cover this
       >
         {menuServiceOptions.map((option, i) => (
           <MenuItem
@@ -419,6 +420,7 @@ export default function Header() {
         }}
         classes={{ paper: classes.menu }}
         elevation={0}
+        style={{ zIndex: 1302 }} // 1 above app bar? so it won't cover this
       >
         {menuToolOptions.map((option, i) => (
           <MenuItem
@@ -450,6 +452,7 @@ export default function Header() {
         onOpen={() => setOpenDrawer(true)}
         classes={{ paper: classes.drawer }}
       >
+        <div className={classes.toolbarMargin} />
         <List disablePadding>
           {routes
             .filter((route) => route.branchValue === undefined)
@@ -536,7 +539,7 @@ export default function Header() {
           </Toolbar>
         </AppBar>
       </ElevationScroll>
-      <div className={classes.toolbarMargin} />
+      <div className={classes.toolbarMargin}>toolbarMargin</div>
     </React.Fragment>
   );
 }
