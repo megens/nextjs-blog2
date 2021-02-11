@@ -87,6 +87,8 @@ const useStyles = makeStyles((theme: Theme) =>
       //color: theme.palette.common.black,
       //color: theme.palette.secondary.dark,
       padding: "10px 30px",
+      fontFamily: "Roboto",
+      fontWeight: "normal",
     },
     tabContainer: {
       //color: "primary",

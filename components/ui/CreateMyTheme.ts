@@ -31,6 +31,33 @@ export default function createMyTheme(options: ThemeOptions) {
         fontWeight: 700,
         textTransform: "none",
       },
+      learnButton: {
+        borderColor: ockhamBlue,
+        color: ockhamBlue,
+        borderWidth: 2,
+        textTransform: "none",
+        borderRadius: 50,
+        fontFamily: "roboto",
+        fontWeight: "bold",
+      },
+      h2: {
+        fontFamily: "Raleway",
+        fontWeight: 700,
+        fontSize: "2.5rem",
+        color: ockhamBlue,
+        lineHeight: 1.5, // space between lines of text
+      },
+      h4: {
+        fontFamily: "Raleway",
+        fontSize: "1.75rem",
+        color: ockhamBlue,
+        fontWeight: 700,
+      },
+      subtitle1: {
+        fontSize: "1.25rem",
+        fontWeight: 300,
+        color: ockhamGrey,
+      },
     },
     ...options,
   });

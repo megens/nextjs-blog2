@@ -16,6 +16,15 @@ declare module "@material-ui/core/styles/createTypography" {
       color: React.CSSProperties["color"];
       textTransform: React.CSSProperties["textTransform"];
     };
+    learnButton: {
+      borderColor: React.CSSProperties["color"];
+      color: React.CSSProperties["color"];
+      borderWidth: React.CSSProperties["borderWidth"];
+      textTransform: React.CSSProperties["textTransform"];
+      borderRadius: React.CSSProperties["borderRadius"];
+      fontFamily: React.CSSProperties["fontFamily"];
+      fontWeight: React.CSSProperties["fontWeight"];
+    };
   }
 
   interface TypographyOptions {
@@ -34,6 +43,15 @@ declare module "@material-ui/core/styles/createTypography" {
       fontSize?: React.CSSProperties["fontSize"];
       color?: React.CSSProperties["color"];
       textTransform?: React.CSSProperties["textTransform"];
+    };
+    learnButton?: {
+      borderColor?: React.CSSProperties["color"];
+      color?: React.CSSProperties["color"];
+      borderWidth?: React.CSSProperties["borderWidth"];
+      textTransform?: React.CSSProperties["textTransform"];
+      borderRadius?: React.CSSProperties["borderRadius"];
+      fontFamily?: React.CSSProperties["fontFamily"];
+      fontWeight?: React.CSSProperties["fontWeight"];
     };
   }
 }

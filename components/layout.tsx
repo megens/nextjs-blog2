@@ -1,16 +1,18 @@
+import React from "react";
 import Head from "next/head";
 import styles from "./layout.module.css";
 import utilStyles from "../styles/utils.module.css";
 import Link from "next/link";
 import MyHeader from "./ui/Header";
 import Footer from "./ui/Footer";
-import theme from "./ui/Theme";
-import { ThemeProvider } from "@material-ui/styles";
+//import theme from "./ui/Theme";
+//import { ThemeProvider } from "@material-ui/styles";
 
 const name = "Robert M (TypeScript)";
 
 export const siteTitle = "Ockham Actuarial";
 
+// RfM: moved ThemeProvider to _app.tsx
 export default function Layout({
   children,
   home,
@@ -19,7 +21,10 @@ export default function Layout({
   home?: boolean;
 }) {
   return (
-    <ThemeProvider theme={theme}>
+    <React.Fragment>
+      {
+        //      <ThemeProvider theme={theme}>
+      }
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content="ockham actuarial ltd" />
@@ -44,6 +49,9 @@ export default function Layout({
         )}
       </div>
       <Footer />
-    </ThemeProvider>
+      {
+        //</ThemeProvider>
+      }
+    </React.Fragment>
   );
 }

@@ -10,6 +10,9 @@ export default theme;
 console.log("Theme keys");
 console.log(Object.keys(theme));
 
+console.log("Breakpoints");
+console.log(theme.breakpoints);
+
 console.log("Theme type");
 console.log(typeof theme);
 
