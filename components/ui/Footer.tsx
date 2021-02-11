@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     mainContainer: {
       position: "absolute",
+      zIndex: theme.zIndex.modal + 1,
     },
     link: {
       color: "white",
@@ -62,7 +63,7 @@ export default function Footer(props: any) {
 
   return (
     <footer className={classes.footer}>
-      <Hidden mdDown>
+      <Hidden smDown>
         <Grid
           container
           direction="row"
@@ -85,17 +86,17 @@ export default function Footer(props: any) {
                   <a className={classes.link}>Services</a>
                 </Link>
               </Grid>
-              <Grid item className={classes.link}>
+              <Grid item>
                 <Link href="/pricing">
                   <a className={classes.link}>Pricing Models</a>
                 </Link>
               </Grid>
-              <Grid item className={classes.link}>
+              <Grid item>
                 <Link href="/reserving">
                   <a className={classes.link}>Reserving</a>
                 </Link>
               </Grid>
-              <Grid item className={classes.link}>
+              <Grid item>
                 <Link href="/reinsurance">
                   <a className={classes.link}>Reinsurance</a>
                 </Link>

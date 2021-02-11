@@ -5,6 +5,13 @@
   position: relative;
 }
 
+.thincontainer {
+  max-width: 36rem;
+  padding: 0 0rem;
+  margin: 5.5rem auto 0rem;
+  position: relative;
+}
+
 .myHeader {
   display: flex;
   flex-direction: column;

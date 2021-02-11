@@ -38,7 +38,7 @@ export default function Layout({
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <MyHeader />
-      <div className={styles.container}>
+      <div className={home ? styles.container : styles.thincontainer}>
         <main>{children}</main>
         {!home && (
           <div className={styles.backToHome}>
