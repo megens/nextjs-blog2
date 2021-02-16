@@ -24,6 +24,7 @@ export default function Layout({
     <React.Fragment>
       {
         //      <ThemeProvider theme={theme}>
+        //      <MyHeader/>>
       }
       <Head>
         <link rel="icon" href="/favicon.ico" />
@@ -37,7 +38,7 @@ export default function Layout({
         <meta name="og:title" content={siteTitle} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <MyHeader />
+
       <div className={home ? styles.container : styles.thincontainer}>
         <main>{children}</main>
         {!home && (
@@ -48,9 +49,10 @@ export default function Layout({
           </div>
         )}
       </div>
-      <Footer />
+
       {
-        //</ThemeProvider>
+        //  <Footer/>
+        //  </ThemeProvider>
       }
     </React.Fragment>
   );

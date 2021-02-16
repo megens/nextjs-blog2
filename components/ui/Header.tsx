@@ -23,6 +23,8 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
+import Link from "../Link"; // material-ui designed Link for nextJs
+
 interface Props {
   children: React.ReactElement;
 }
@@ -104,12 +106,14 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     contact: {
       ...theme.typography.contact,
+
       borderRadius: "50px",
       marginLeft: "50px",
       marginRight: "25px",
       height: "45px",
       "&:hover": {
         backgroundColor: theme.palette.secondary.light,
+        textDecoration: "none",
       },
     },
     menu: {
@@ -370,10 +374,8 @@ export default function Header() {
         className={classes.contact}
         variant="contained"
         color="secondary"
-        onClick={() => {
-          router.push("/contact");
-          setTabValue(false);
-        }}
+        component={Link}
+        href="/contact"
       >
         Contact
       </Button>

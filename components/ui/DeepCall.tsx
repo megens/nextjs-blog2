@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     background: {
       //backgroundImage: `url(${background})`,
-      backgroundImage: `url(${"/images/iceberg_b&w.jpg"})`,
+      backgroundImage: 'url("/images/iceberg_b&w.jpg")',
       backgroundPosition: "center",
       backgroundSize: "cover", // will stretch and fit to cover the whole container
       backgroundRepeat: "no-repeat",
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down("md")]: {
         //backgroundAttachment: "inherit",
         //backgroundImage: `url(${mobileBackground})`,
-        backgroundImage: `url(${"/images/iceberg_b&w.jpg"})`,
+        backgroundImage: 'url("/images/iceberg_b&w.jpg")',
       },
     },
     contactButton: {

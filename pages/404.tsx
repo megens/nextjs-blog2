@@ -8,7 +8,7 @@ export default function FourOhFour() {
   return (
     <Layout>
       <h1>
-        404 - No Match found for <code>{router.asPath}</code>
+        404 - No path found for <code>{router.asPath}</code>
       </h1>
     </Layout>
   );

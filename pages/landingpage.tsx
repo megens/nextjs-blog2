@@ -137,14 +137,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function LandingPage() {
   const classes = useStyles();
-
   const theme = useTheme(); // gives access to default theme in our component
 
-  console.log("Breakpoints FROM LANDING PAGE");
-  console.log(theme.breakpoints);
-
-  console.log("and AFTER...");
-  console.log(theme.breakpoints);
   const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
   const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
   const matchesXS = useMediaQuery(theme.breakpoints.down("xs"));
