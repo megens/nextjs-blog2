@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Dispatch } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -27,6 +27,15 @@ import Link from "../Link"; // material-ui designed Link for nextJs
 
 interface Props {
   children: React.ReactElement;
+}
+
+interface HeaderProps {
+  tabValue: number | false;
+  setTabValue: Dispatch<React.SetStateAction<number | false>>;
+  selectedIndexServices: number | undefined;
+  setSelectedIndexServices: Dispatch<React.SetStateAction<number | undefined>>;
+  selectedIndexTools: number | undefined;
+  setSelectedIndexTools: Dispatch<React.SetStateAction<number | undefined>>;
 }
 
 function ElevationScroll(props: Props) {
@@ -106,7 +115,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     contact: {
       ...theme.typography.contact,
-
       borderRadius: "50px",
       marginLeft: "50px",
       marginRight: "25px",
@@ -154,14 +162,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Header() {
+export default function Header(props: HeaderProps) {
   const router = useRouter();
   const classes = useStyles();
   const theme = useTheme(); // gives access to default theme in our component
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const matches = useMediaQuery(theme.breakpoints.down("md")); //RFM: CHANGE TO md
+  const matches = useMediaQuery(theme.breakpoints.down("sm")); //RFM: CHANGE TO md
 
-  const [tabValue, setTabValue] = useState<number | false>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
   const [anchorElServices, setAnchorElServices] = useState<HTMLElement | null>(
     null
@@ -169,26 +176,34 @@ export default function Header() {
   const [anchorElTools, setAnchorElTools] = useState<HTMLElement | null>(null);
   const [openMenuServices, setOpenMenuServices] = useState<boolean>(false);
   const [openMenuTools, setOpenMenuTools] = useState<boolean>(false);
-  const [selectedIndexServices, setSelectedIndexServices] = useState<number>(0);
-  const [selectedIndexTools, setSelectedIndexTools] = useState<number>(0);
 
   interface RouteType {
     name: string;
     link: string;
     routeValue: number;
     tabValue: number;
-    branchValue?: number;
+    branchValueServices: number | undefined;
+    branchValueTools: number | undefined;
     ariaOwns?: string | undefined;
     ariaPopup?: boolean | "true" | "false" | undefined;
     mouseOver?: { (event: React.MouseEvent<HTMLElement>): void };
   }
   const routes: RouteType[] = [
-    { name: "Home", link: "/", routeValue: 0, tabValue: 0 },
+    {
+      name: "Home",
+      link: "/",
+      routeValue: 0,
+      tabValue: 0,
+      branchValueServices: undefined,
+      branchValueTools: undefined,
+    },
     {
       name: "Services",
       link: "/services",
       routeValue: 1,
       tabValue: 1,
+      branchValueServices: undefined,
+      branchValueTools: undefined,
       ariaOwns: anchorElServices ? "service-menu" : undefined,
       ariaPopup: anchorElServices ? "true" : undefined,
       mouseOver: (event: React.MouseEvent<HTMLElement>) =>
@@ -199,21 +214,24 @@ export default function Header() {
       link: "/pricing",
       routeValue: 1.1,
       tabValue: 1,
-      branchValue: 1,
+      branchValueServices: 1,
+      branchValueTools: undefined,
     },
     {
       name: "Reserving",
       link: "/reserving",
       routeValue: 1.2,
       tabValue: 1,
-      branchValue: 2,
+      branchValueServices: 2,
+      branchValueTools: undefined,
     },
     {
       name: "Reinsurance",
       link: "/reinsurance",
       routeValue: 1.3,
       tabValue: 1,
-      branchValue: 3,
+      branchValueServices: 3,
+      branchValueTools: undefined,
     },
 
     {
@@ -221,6 +239,8 @@ export default function Header() {
       link: "/tools",
       routeValue: 2,
       tabValue: 2,
+      branchValueServices: undefined,
+      branchValueTools: undefined,
       ariaOwns: anchorElTools ? "service-menu" : undefined,
       ariaPopup: anchorElTools ? "true" : undefined,
       mouseOver: (event: React.MouseEvent<HTMLElement>) =>
@@ -231,30 +251,41 @@ export default function Header() {
       link: "/iceberg",
       routeValue: 2.1,
       tabValue: 2,
-      branchValue: 1,
+      branchValueServices: undefined,
+      branchValueTools: 1,
     },
     {
       name: "FlightRisk",
       link: "/flightrisk",
       routeValue: 2.2,
       tabValue: 2,
-      branchValue: 2,
+      branchValueServices: undefined,
+      branchValueTools: 2,
     },
     {
       name: "DataBarrier",
       link: "/databarrier",
       routeValue: 2.3,
       tabValue: 2,
-      branchValue: 3,
+      branchValueServices: undefined,
+      branchValueTools: 3,
     },
     {
       name: "<futureProof/>",
       link: "/futureproof",
       routeValue: 2.4,
       tabValue: 2,
-      branchValue: 4,
+      branchValueServices: undefined,
+      branchValueTools: 4,
     },
-    { name: "Client Login", link: "/login", routeValue: 3, tabValue: 3 },
+    {
+      name: "Client Login",
+      link: "/login",
+      routeValue: 3,
+      tabValue: 3,
+      branchValueServices: undefined,
+      branchValueTools: undefined,
+    },
   ];
 
   const menuServiceOptions = routes.filter((route) => route.tabValue === 1);
@@ -270,11 +301,24 @@ export default function Header() {
     });
     if (targetRoute === undefined) {
       router.push("/404");
-      setTabValue(false);
+      props.setTabValue(false);
     } else {
       router.push(targetRoute.link);
       //setTabValue(Math.floor(targetRoute.routeValue));
-      setTabValue(targetRoute.tabValue);
+      props.setTabValue(targetRoute.tabValue);
+      props.setSelectedIndexServices(targetRoute.branchValueServices);
+      props.setSelectedIndexTools(targetRoute.branchValueTools);
+      console.log(targetRoute);
+      console.log(
+        "link: " +
+          targetRoute.link +
+          " tab: " +
+          targetRoute.tabValue +
+          " services: " +
+          targetRoute.branchValueServices +
+          " tools: " +
+          targetRoute.branchValueTools
+      );
     }
     //router.push(routes[newTabValue].link);
   };
@@ -295,23 +339,6 @@ export default function Header() {
     setOpenMenuTools(true);
   };
 
-  const handleMenuItemClickServices = (
-    e: React.MouseEvent,
-    i: number
-  ): void => {
-    setAnchorElServices(null); // menu goes away
-    setOpenMenuServices(false);
-    setSelectedIndexServices(i);
-    console.log("set selectedIndex to: " + i);
-  };
-
-  const handleMenuItemClickTools = (e: React.MouseEvent, i: number): void => {
-    setAnchorElTools(null); // menu goes away
-    setOpenMenuTools(false);
-    setSelectedIndexTools(i);
-    console.log("set selectedIndex to: " + i);
-  };
-
   const handleClose = (): void => {
     setAnchorElServices(null);
     setAnchorElTools(null);
@@ -327,38 +354,40 @@ export default function Header() {
       (route) => route.link === window.location.pathname
     );
     if (currentRoute === undefined) {
-      setTabValue(false);
-      setSelectedIndexServices(0);
-      setSelectedIndexTools(0);
-    } else {
-      setTabValue(currentRoute.tabValue);
-      if (
-        currentRoute.tabValue === 1 &&
-        currentRoute.branchValue !== undefined
-      ) {
-        setSelectedIndexServices(currentRoute.branchValue);
-        setSelectedIndexTools(0);
-      }
-      if (
-        currentRoute.tabValue === 2 &&
-        currentRoute.branchValue !== undefined
-      ) {
-        setSelectedIndexServices(0);
-        setSelectedIndexTools(currentRoute.branchValue);
-      }
+      props.setTabValue(false);
+      props.setSelectedIndexServices(undefined);
+      props.setSelectedIndexTools(undefined);
+    } else if (
+      currentRoute.tabValue !== props.tabValue ||
+      currentRoute.branchValueServices !== props.selectedIndexServices ||
+      currentRoute.branchValueTools !== props.selectedIndexTools
+    ) {
+      console.log("calling useEffect");
+      console.log(window.location.pathname);
+      console.log(currentRoute);
+
+      /*
+      props.setTabValue(currentRoute.tabValue);
+      props.setSelectedIndexServices(currentRoute.branchValueServices);
+      props.setSelectedIndexTools(currentRoute.branchValueTools);
+      */
     }
-  }, ["tabValue", "selectedIndexServices", "selectedIndexTools"]);
+  }, [props.tabValue, props.selectedIndexServices, props.selectedIndexTools]);
 
   const tabs = (
     <React.Fragment>
       <Tabs
         className={classes.tabContainer}
-        value={tabValue}
+        value={props.tabValue}
         onChange={handleChange}
         indicatorColor="primary" // change color of underline to primary (typed as primary|secondary|undefined)
       >
         {routes
-          .filter((route) => route.branchValue === undefined)
+          .filter(
+            (route) =>
+              route.branchValueServices === undefined &&
+              route.branchValueTools === undefined
+          )
           .map((route, index) => (
             <Tab
               key={`${route}${index}`}
@@ -400,12 +429,10 @@ export default function Header() {
             key={i}
             onClick={(e: React.MouseEvent): void => {
               handleChange(e, option.routeValue);
-              handleMenuItemClickServices(e, i);
               handleClose();
-              setTabValue(option.routeValue);
             }}
             classes={{ root: classes.menuItem }}
-            selected={i === selectedIndexServices} //selectedIndexServices}
+            selected={i === props.selectedIndexServices} //selectedIndexServices}
           >
             {option.name}
           </MenuItem>
@@ -432,12 +459,10 @@ export default function Header() {
             onClick={(e: React.MouseEvent): void => {
               //router.push(option.link);
               handleChange(e, option.routeValue);
-              handleMenuItemClickTools(e, i);
               handleClose();
-              setTabValue(option.routeValue);
             }}
             classes={{ root: classes.menuItem }}
-            selected={i === selectedIndexTools}
+            selected={i === props.selectedIndexTools}
           >
             {option.name}
           </MenuItem>
@@ -459,18 +484,21 @@ export default function Header() {
         <div className={classes.toolbarMargin} />
         <List disablePadding>
           {routes
-            .filter((route) => route.branchValue === undefined)
+            .filter(
+              (route) =>
+                route.branchValueServices === undefined &&
+                route.branchValueTools === undefined
+            )
             .map((route, index) => (
               <ListItem
                 key={`${route}${index}`}
                 divider
                 button
                 classes={{ selected: classes.drawerItemSelected }}
-                selected={tabValue === route.routeValue}
+                selected={props.tabValue === route.routeValue}
                 onClick={(e: React.MouseEvent): void => {
                   setOpenDrawer(false);
                   handleChange(e, route.routeValue);
-                  setTabValue(route.routeValue);
                 }}
               >
                 <ListItemText className={classes.drawerItem} disableTypography>
@@ -482,7 +510,7 @@ export default function Header() {
             onClick={() => {
               setOpenDrawer(false);
               router.push("/contact");
-              setTabValue(false);
+              props.setTabValue(false);
             }}
             divider
             button
@@ -520,7 +548,7 @@ export default function Header() {
               className={classes.logoContainer}
               onClick={() => {
                 router.push(routes[0].link);
-                setTabValue(0);
+                props.setTabValue(0);
               }}
             >
               <img
@@ -531,7 +559,9 @@ export default function Header() {
             </Button>
 
             <Typography className={classes.signage} variant="h4">
-              Ockham Actuarial
+              Ockham Actuarial tab: {props.tabValue}.Services:{" "}
+              {props.selectedIndexServices}
+              .Tools: {props.selectedIndexTools}
             </Typography>
             {/*
             <Typography className={classes.signage} variant="body1">
