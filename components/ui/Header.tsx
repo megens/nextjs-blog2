@@ -351,7 +351,8 @@ export default function Header(props: HeaderProps) {
     //(instead of default Home highlight). Comlicated because NextJS refreshes on every router.push()
 
     let currentRoute: RouteType | undefined = routes.find(
-      (route) => route.link === window.location.pathname
+      //(route) => route.link === window.location.pathname
+      (route) => route.link === router.pathname
     );
     if (currentRoute === undefined) {
       props.setTabValue(false);
@@ -362,17 +363,16 @@ export default function Header(props: HeaderProps) {
       currentRoute.branchValueServices !== props.selectedIndexServices ||
       currentRoute.branchValueTools !== props.selectedIndexTools
     ) {
-      console.log("calling useEffect");
-      console.log(window.location.pathname);
-      console.log(currentRoute);
-
       /*
+      console.log("calling useEffect");
+      console.log(router.pathname);
+      console.log(currentRoute);
+      */
       props.setTabValue(currentRoute.tabValue);
       props.setSelectedIndexServices(currentRoute.branchValueServices);
       props.setSelectedIndexTools(currentRoute.branchValueTools);
-      */
     }
-  }, [props.tabValue, props.selectedIndexServices, props.selectedIndexTools]);
+  }, []);
 
   const tabs = (
     <React.Fragment>
