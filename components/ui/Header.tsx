@@ -25,6 +25,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 
 import Link from "../Link"; // material-ui designed Link for nextJs
 
+import useWindowLocation from "../../hooks/useWindowLocation";
+
 interface Props {
   children: React.ReactElement;
 }
@@ -177,6 +179,12 @@ export default function Header(props: HeaderProps) {
   const [openMenuServices, setOpenMenuServices] = useState<boolean>(false);
   const [openMenuTools, setOpenMenuTools] = useState<boolean>(false);
 
+  const path = useWindowLocation();
+  let currentPathname: string = "";
+  if (path) {
+    currentPathname = path.pathname;
+  }
+
   interface RouteType {
     name: string;
     link: string;
@@ -308,17 +316,8 @@ export default function Header(props: HeaderProps) {
       props.setTabValue(targetRoute.tabValue);
       props.setSelectedIndexServices(targetRoute.branchValueServices);
       props.setSelectedIndexTools(targetRoute.branchValueTools);
-      console.log(targetRoute);
-      console.log(
-        "link: " +
-          targetRoute.link +
-          " tab: " +
-          targetRoute.tabValue +
-          " services: " +
-          targetRoute.branchValueServices +
-          " tools: " +
-          targetRoute.branchValueTools
-      );
+      //console.log(targetRoute);
+      //console.log(        "link: " +          targetRoute.link +          " tab: " +          targetRoute.tabValue +          " services: " +          targetRoute.branchValueServices +          " tools: " +          targetRoute.branchValueTools);
     }
     //router.push(routes[newTabValue].link);
   };
@@ -349,30 +348,26 @@ export default function Header(props: HeaderProps) {
   useEffect(() => {
     // the following componentDidMount type hook makes ensures active Tab will always be highlighted even if page refreshes
     //(instead of default Home highlight). Comlicated because NextJS refreshes on every router.push()
-
     let currentRoute: RouteType | undefined = routes.find(
       //(route) => route.link === window.location.pathname
-      (route) => route.link === router.pathname
+      (route) => route.link === currentPathname
     );
     if (currentRoute === undefined) {
       props.setTabValue(false);
       props.setSelectedIndexServices(undefined);
       props.setSelectedIndexTools(undefined);
-    } else if (
-      currentRoute.tabValue !== props.tabValue ||
-      currentRoute.branchValueServices !== props.selectedIndexServices ||
-      currentRoute.branchValueTools !== props.selectedIndexTools
-    ) {
-      /*
-      console.log("calling useEffect");
-      console.log(router.pathname);
-      console.log(currentRoute);
-      */
-      props.setTabValue(currentRoute.tabValue);
-      props.setSelectedIndexServices(currentRoute.branchValueServices);
-      props.setSelectedIndexTools(currentRoute.branchValueTools);
+    } else {
+      if (currentRoute.tabValue !== props.tabValue) {
+        props.setTabValue(currentRoute.tabValue);
+      }
+      if (currentRoute.branchValueServices !== props.selectedIndexServices) {
+        props.setSelectedIndexServices(currentRoute.branchValueServices);
+      }
+      if (currentRoute.branchValueTools !== props.selectedIndexTools) {
+        props.setSelectedIndexTools(currentRoute.branchValueTools);
+      }
     }
-  }, []);
+  }, [currentPathname]);
 
   const tabs = (
     <React.Fragment>
@@ -559,9 +554,7 @@ export default function Header(props: HeaderProps) {
             </Button>
 
             <Typography className={classes.signage} variant="h4">
-              Ockham Actuarial tab: {props.tabValue}.Services:{" "}
-              {props.selectedIndexServices}
-              .Tools: {props.selectedIndexTools}
+              Ockham Actuarial
             </Typography>
             {/*
             <Typography className={classes.signage} variant="body1">
