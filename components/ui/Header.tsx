@@ -22,6 +22,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Hidden from "@material-ui/core/Hidden";
 
 import Link from "../Link"; // material-ui designed Link for nextJs
 
@@ -561,8 +562,12 @@ export default function Header(props: HeaderProps) {
               tab value = {tabValue} and index value = {selectedIndexServices}{" "}
               and {selectedIndexTools}
             </Typography>
-            */}
+
             {matches ? drawer : tabs}
+            // change this to use of Hidden to avoid that split second flash
+            */}
+            <Hidden mdDown>{tabs}</Hidden>
+            <Hidden lgUp>{drawer}</Hidden>
           </Toolbar>
         </AppBar>
       </ElevationScroll>
