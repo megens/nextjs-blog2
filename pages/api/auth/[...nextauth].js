@@ -4,7 +4,8 @@ import Providers from "next-auth/providers";
 // https://blog.logrocket.com/using-authentication-in-next-js/
 
 const options = {
-  site: process.env.NEXTAUTH_URL,
+  //site: process.env.NEXTAUTH_URL,
+  site: process.env.VERCEL_URL,
   providers: [
     Providers.Email({
       server: {
