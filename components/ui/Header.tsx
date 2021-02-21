@@ -565,7 +565,9 @@ export default function Header(props: HeaderProps) {
               {/*
               {session ? session.user.email : "not signed in"}
               */}
-              NextAuth + {process.env.NEXT_PUBLIC_VERCEL_URL}
+              NextAuth + {process.env.NEXT_PUBLIC_VERCEL_URL} +{" "}
+              {process.env.NEXT_PUBLIC_VERIFIER_EMAIL_USERNAME} +{" "}
+              {process.env.NEXT_PUBLIC_VERIFIER_EMAIL_PASSWORD}
             </Typography>
             {/*
             <Typography className={classes.signage} variant="body1">
