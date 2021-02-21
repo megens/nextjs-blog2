@@ -562,7 +562,10 @@ export default function Header(props: HeaderProps) {
               Ockham Actuarial
             </Typography>
             <Typography className={classes.signage} variant="body1">
+              {/*
               {session ? session.user.email : "not signed in"}
+              */}
+              NextAuth + {process.env.NEXT_PUBLIC_VERCEL_URL}
             </Typography>
             {/*
             <Typography className={classes.signage} variant="body1">
