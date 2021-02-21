@@ -5,7 +5,7 @@ import Providers from "next-auth/providers";
 
 const options = {
   //site: process.env.NEXTAUTH_URL,
-  site: process.env.NEXTAUTH_URL,
+  site: process.env.NEXT_PUBLIC_NEXTAUTH_URL,
   providers: [
     Providers.Email({
       server: {
@@ -13,14 +13,14 @@ const options = {
         host: "smtp.gmail.com", //"smtp.gmail.com" //process.env.VERIFIER_SMTP_SERVER
         secure: true,
         auth: {
-          user: process.env.VERIFIER_EMAIL_USERNAME,
-          pass: process.env.VERIFIER_EMAIL_PASSWORD,
+          user: process.env.NEXT_PUBLIC_VERIFIER_EMAIL_USERNAME,
+          pass: process.env.NEXT_PUBLIC_VERIFIER_EMAIL_PASSWORD,
         },
         tls: {
           rejectUnauthorized: false,
         },
       },
-      from: process.env.EMAIL_FROM,
+      from: process.env.NEXT_PUBLIC_EMAIL_FROM,
     }),
   ],
   database: process.env.DATABASE_URL,
