@@ -7,6 +7,8 @@ import { ThemeProvider } from "@material-ui/styles";
 import MyHeader from "../components/ui/Header";
 import Footer from "../components/ui/Footer";
 
+import { Provider } from "next-auth/client";
+
 export default function App({ Component, pageProps }: AppProps) {
   const [tabValue, setTabValue] = useState<number | false>(false);
   const [selectedIndexServices, setSelectedIndexServices] = useState<
@@ -19,24 +21,27 @@ export default function App({ Component, pageProps }: AppProps) {
   //return <Component {...pageProps} />;
   return (
     <React.Fragment>
-      <ThemeProvider theme={theme}>
-        <Head>
-          <meta
-            name="viewport"
-            content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
+      <Provider session={pageProps.session}>
+        <ThemeProvider theme={theme}>
+          <Head>
+            <meta
+              name="viewport"
+              content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
+            />
+          </Head>
+
+          <MyHeader
+            tabValue={tabValue}
+            setTabValue={setTabValue}
+            selectedIndexServices={selectedIndexServices}
+            setSelectedIndexServices={setSelectedIndexServices}
+            selectedIndexTools={selectedIndexTools}
+            setSelectedIndexTools={setSelectedIndexTools}
           />
-        </Head>
-        <MyHeader
-          tabValue={tabValue}
-          setTabValue={setTabValue}
-          selectedIndexServices={selectedIndexServices}
-          setSelectedIndexServices={setSelectedIndexServices}
-          selectedIndexTools={selectedIndexTools}
-          setSelectedIndexTools={setSelectedIndexTools}
-        />
-        <Component {...pageProps} />
-        <Footer />
-      </ThemeProvider>
+          <Component {...pageProps} />
+          <Footer />
+        </ThemeProvider>
+      </Provider>
     </React.Fragment>
   );
 }

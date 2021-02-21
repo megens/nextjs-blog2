@@ -28,6 +28,8 @@ import Link from "../Link"; // material-ui designed Link for nextJs
 
 import useWindowLocation from "../../hooks/useWindowLocation";
 
+import { signIn, signOut, useSession } from "next-auth/client";
+
 interface Props {
   children: React.ReactElement;
 }
@@ -166,6 +168,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function Header(props: HeaderProps) {
+  const [session, loading] = useSession();
+
   const router = useRouter();
   const classes = useStyles();
   const theme = useTheme(); // gives access to default theme in our component
@@ -556,6 +560,9 @@ export default function Header(props: HeaderProps) {
 
             <Typography className={classes.signage} variant="h4">
               Ockham Actuarial
+            </Typography>
+            <Typography className={classes.signage} variant="body1">
+              {session ? session.user.email : "not signed in"}
             </Typography>
             {/*
             <Typography className={classes.signage} variant="body1">

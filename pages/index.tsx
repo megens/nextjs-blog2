@@ -16,6 +16,8 @@ import Layout from "../components/layout";
 import ButtonArrow from "../components/ui/ButtonArrow";
 import CallToAction from "../components/ui/DeepCall";
 
+import { signIn, signOut, useSession } from "next-auth/client";
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     mainContainer: {
@@ -136,12 +138,18 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function LandingPage() {
+  const [session, loading] = useSession();
+
   const classes = useStyles();
   const theme = useTheme(); // gives access to default theme in our component
 
   const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
   const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
   const matchesXS = useMediaQuery(theme.breakpoints.down("xs"));
+
+  if (loading) {
+    return <React.Fragment>'...loading'</React.Fragment>;
+  }
 
   return (
     <React.Fragment>
