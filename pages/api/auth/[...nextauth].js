@@ -5,7 +5,7 @@ import Providers from "next-auth/providers";
 
 const options = {
   //site: process.env.NEXTAUTH_URL,
-  site: process.env.VERCEL_URL,
+  site: process.env.NEXTAUTH_URL,
   providers: [
     Providers.Email({
       server: {
@@ -23,7 +23,7 @@ const options = {
       from: process.env.EMAIL_FROM,
     }),
   ],
-  database: process.env.MONGODB_URI,
+  database: process.env.DATABASE_URL,
   session: {
     jwt: true,
     maxAge: 30 * 24 * 60 * 60, // 30 days
