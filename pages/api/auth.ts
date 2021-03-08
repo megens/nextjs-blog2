@@ -26,7 +26,8 @@ function authUser(db, email, password, hash, callback) {
 }
 */
 
-function validate(req: NextApiRequest) {
+// TO DO ... type this req.body better!
+function validate(req: any) {
   console.log("validating sign in attempt ...");
   const joiSchema = Joi.object({
     email: Joi.string().min(3).max(255).required().email(),

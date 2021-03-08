@@ -81,6 +81,8 @@ export default function Login() {
     formikHelpers: FormikHelpers<LoginFormTypes>
   ): any {
     console.log("------");
+    console.log(values);
+    console.log(values.email);
     fetch("/api/auth", {
       method: "POST",
       headers: {
