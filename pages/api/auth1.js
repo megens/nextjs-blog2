@@ -18,7 +18,7 @@ The implementation for this route is as follows:
 import Joi from "joi";
 import bcrypt from "bcrypt";
 
-import { NextApiRequest, NextApiResponse } from "next";
+// import { NextApiRequest, NextApiResponse } from "next";
 
 import { MongoClient } from "mongodb";
 import assert from "assert";
