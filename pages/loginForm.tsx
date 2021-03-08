@@ -83,7 +83,7 @@ export default function Login() {
     console.log("------");
     console.log(values);
     console.log(values.email);
-    fetch("/api/auth", {
+    fetch("/api/auth1", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
