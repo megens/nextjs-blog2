@@ -12,7 +12,7 @@ The implementation for this route is as follows:
 */
 
 // import { User } from "../../models/UserModel";
-import dbConnect from "../../util/mongooseConnect";
+// import dbConnect from "../../util/mongooseConnect";
 import mongoose from "mongoose";
 import _ from "lodash";
 import Joi from "joi";
