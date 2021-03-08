@@ -93,6 +93,7 @@ export default function Login() {
     })
       .then((r) => {
         console.log("r.json");
+        console.log(r.json);
         return r.json();
       })
       .then((data) => {

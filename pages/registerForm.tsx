@@ -143,6 +143,7 @@ export default function Login() {
                 id="username"
                 label="Username"
                 name="username"
+                autoComplete="name"
                 autoFocus
               />
               <Field
@@ -167,6 +168,7 @@ export default function Login() {
                 label="Password"
                 type="password"
                 id="password"
+                autoComplete="new password"
               />
               <Field
                 as={TextField}
@@ -178,6 +180,7 @@ export default function Login() {
                 label="Confirm Password"
                 type="password"
                 id="passwordConfirmation"
+                autoComplete="match password"
               />
               <Field
                 as={FormControlLabel}

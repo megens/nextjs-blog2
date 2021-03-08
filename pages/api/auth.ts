@@ -36,11 +36,13 @@ function validate(req: NextApiRequest) {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log("about to dbConnect");
   await dbConnect();
   console.log("readyState");
   console.log(mongoose.connection.readyState);
   if (req.method === "POST") {
     // login
+    console.log("POST request");
 
     const { error } = validate(req.body); // Joi validation
 
