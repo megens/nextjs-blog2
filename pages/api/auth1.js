@@ -30,6 +30,15 @@ function authUser(db, email, password, hash, callback) {
 
 import { connectToDatabase } from "../../util/mongodb";
 
+function validate(reqBody) {
+  console.log("validating sign in attempt ...");
+  const joiSchema = Joi.object({
+    email: Joi.string().min(3).max(255).required().email(),
+    password: Joi.string().min(3).max(255).required(), // pre-hash
+  });
+  return joiSchema.validate(reqBody);
+}
+
 export default async (req, res) => {
   /*  const { db } = await connectToDatabase();
 
@@ -48,7 +57,26 @@ export default async (req, res) => {
   console.log("readyState");
   console.log(mongoose.connection.readyState);
 
-  res.json({ result: true });
+  if (req.method === "POST") {
+    // login
+    console.log("POST request");
+
+    const { error } = validate(req.body); // Joi validation
+
+    if (error) {
+      console.log("error: ");
+      console.log(error);
+      return res.status(400).send(error.details[0].message);
+    }
+
+    console.log("email is ...");
+    console.log(req.body.email);
+    let user = await User.findOne({ email: req.body.email });
+
+    //
+  }
+
+  res.status(200).json({ token: true });
 };
 
 /*
