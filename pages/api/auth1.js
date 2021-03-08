@@ -69,9 +69,16 @@ export default async (req, res) => {
       return res.status(400).send(error.details[0].message);
     }
 
+    // verify email does not exist already
     console.log("email is ...");
     console.log(req.body.email);
     let user = await User.findOne({ email: req.body.email });
+
+    // put in db connection error handling here, like other version... TO DO
+    if (!user) {
+      console.log(400);
+      return res.status(400).send("Invalid email or password.");
+    }
 
     //
   }
