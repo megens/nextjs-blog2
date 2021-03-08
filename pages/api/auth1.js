@@ -5,7 +5,7 @@ import dbConnect from "../../util/mongooseConnect";
 import mongoose from "mongoose";
 import _ from "lodash";
 import Joi from "joi";
-const bcrypt = require("bcrypt");
+//const bcrypt = require('bcrypt')
 
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -27,7 +27,7 @@ function authUser(db, email, password, hash, callback) {
 */
 
 // TO DO ... type this req.body better!
-function validate(req: any) {
+function validate(req) {
   console.log("validating sign in attempt ...");
   const joiSchema = Joi.object({
     email: Joi.string().min(3).max(255).required().email(),
@@ -36,7 +36,7 @@ function validate(req: any) {
   return joiSchema.validate(req);
 }
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (req, res) => {
   console.log("about to dbConnect");
   await dbConnect();
   console.log("readyState");
