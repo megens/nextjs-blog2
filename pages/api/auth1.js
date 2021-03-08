@@ -21,7 +21,7 @@ import bcrypt from "bcrypt";
 // import { NextApiRequest, NextApiResponse } from "next";
 
 import { MongoClient } from "mongodb";
-import assert from "assert";
+// import assert from "assert";
 
 import { v4 } from "uuid";
 
