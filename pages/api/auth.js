@@ -28,7 +28,7 @@ function authUser(db, email, password, hash, callback) {
 
 // TO DO ... type this req.body better!
 function validate(req) {
-  console.log("validating sign in attempt ...");
+  console.log("validating Sign In attempt ...");
   const joiSchema = Joi.object({
     email: Joi.string().min(3).max(255).required().email(),
     password: Joi.string().min(3).max(255).required(), // pre-hash
