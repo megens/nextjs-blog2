@@ -10,6 +10,22 @@ Let's go ahead and create the api directory and a new file in this directory cal
 This endpoint will return a list of 20 movies from our MongoDB database. 
 The implementation for this route is as follows:
 */
+
+import { User } from "../../models/UserModel";
+import dbConnect from "../../util/mongooseConnect";
+import mongoose from "mongoose";
+import _ from "lodash";
+import Joi from "joi";
+import bcrypt from "bcrypt";
+
+import { NextApiRequest, NextApiResponse } from "next";
+
+import { MongoClient } from "mongodb";
+import assert from "assert";
+
+import { v4 } from "uuid";
+
+
 import { connectToDatabase } from "../../util/mongodb";
 
 export default async (req, res) => {
