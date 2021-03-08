@@ -11,7 +11,7 @@ This endpoint will return a list of 20 movies from our MongoDB database.
 The implementation for this route is as follows:
 */
 
-import { User } from "../../models/UserModel";
+// import { User } from "../../models/UserModel";
 import dbConnect from "../../util/mongooseConnect";
 import mongoose from "mongoose";
 import _ from "lodash";
