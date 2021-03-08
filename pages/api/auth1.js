@@ -16,7 +16,7 @@ The implementation for this route is as follows:
 // import mongoose from "mongoose";
 // import _ from "lodash";
 import Joi from "joi";
-import bcrypt from "bcrypt";
+// import bcrypt from "bcrypt";
 
 // import { NextApiRequest, NextApiResponse } from "next";
 
