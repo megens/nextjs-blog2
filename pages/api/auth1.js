@@ -27,6 +27,8 @@ function authUser(db, email, password, hash, callback) {
 */
 
 // TO DO ... type this req.body better!
+
+/*
 function validate(req) {
   console.log("validating Sign In attempt ...");
   const joiSchema = Joi.object({
@@ -35,8 +37,26 @@ function validate(req) {
   });
   return joiSchema.validate(req);
 }
+*/
+
+import { connectToDatabase } from "../../util/mongodb";
 
 export default async (req, res) => {
+
+  console.log('about to Connect')
+  const { db } = await connectToDatabase();
+
+  const movies = await db
+    .collection("movies")
+    .find({})
+    .sort({ metacritic: -1 })
+    .limit(20)
+    .toArray();
+
+  res.json(movies);
+
+
+  /*
   console.log("about to dbConnect");
   await dbConnect();
   console.log("readyState");
@@ -82,4 +102,5 @@ export default async (req, res) => {
     console.log("status: 200");
     return;
   }
+  */
 };
