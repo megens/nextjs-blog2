@@ -96,15 +96,19 @@ export default function Login() {
         return r.json();
       })
       .then((data) => {
+        console.log("data");
         if (data && data.error) {
+          console.log("error");
           console.log(data.message); // TO DO ... address this error!
         }
         if (data && data.token) {
           //set cookie
+          console.log("token");
           console.log("setting a cookie");
           cookie.set("token", data.token, { expires: 2 });
           Router.push("/my-profile/dashboard");
         }
+        console.log("something else");
       });
   }
 
@@ -117,7 +121,7 @@ export default function Login() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Register
+          Sign In
         </Typography>
         <Formik
           validationSchema={object({
