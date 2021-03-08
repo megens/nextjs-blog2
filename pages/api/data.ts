@@ -3,10 +3,11 @@
 // Any file that exports a default async function and is created in the page/api folder will automatically be an API route.
 // In this case, this file will be mapped to http://localhost:3000/api/data.
 
-import { getSession } from "next-auth/client";
+import { getSession, Session } from "next-auth/client";
+import { NextApiRequest, NextApiResponse } from "next-auth/_utils";
 
-export default async (req, res) => {
-  const session = await getSession({ req });
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const session: Session | null = await getSession({ req });
 
   if (session) {
     res.status(200).json({

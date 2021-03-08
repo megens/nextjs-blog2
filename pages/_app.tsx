@@ -38,7 +38,9 @@ export default function App({ Component, pageProps }: AppProps) {
             selectedIndexTools={selectedIndexTools}
             setSelectedIndexTools={setSelectedIndexTools}
           />
+
           <Component {...pageProps} />
+
           <Footer />
         </ThemeProvider>
       </Provider>

@@ -1,3 +1,7 @@
+// https://formik.org/docs/examples/with-material-ui
+// this uses the useFormik hook, which is discouraged.
+// and it's in .jsx, (not .tsx)
+
 import Layout from "../components/layout";
 
 import React from "react";
@@ -15,13 +19,18 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles, createStyles } from "@material-ui/styles";
 import Container from "@material-ui/core/Container";
 
+import { useFormik } from "formik";
+import * as yup from "yup";
+
 import { useTheme, Theme } from "@material-ui/core/styles";
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
+      {//TO DO CHANGE href here}
+      }   
+      <Link color="inherit" href="https://material-ui.com/"> 
         Ockham Actuarial
       </Link>{" "}
       {new Date().getFullYear()}
@@ -30,7 +39,8 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles((theme: Theme) =>
+
+const useStyles = makeStyles((theme) =>
   createStyles({
     paper: {
       marginTop: theme.spacing(8),
@@ -39,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: "center",
     },
     avatar: {
-      margin: theme.spacing(1),
+       margin: theme.spacing(1),
       backgroundColor: theme.palette.secondary.main,
     },
     form: {
@@ -52,8 +62,27 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function LoginSignup() {
+const validationSchema = yup.object({
+  email: yup
+    .string("Enter your email")
+    .email("Enter a valid email")
+    .required("Email is required"),
+  password: yup.string("Enter your password").min(6).required(),
+});
+
+export default function Login() {
   const classes = useStyles();
+
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2));
+    },
+  });
 
   return (
     <Container component="main" maxWidth="xs">
@@ -66,7 +95,7 @@ export default function LoginSignup() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit = {formik.handleSubmit}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -77,6 +106,10 @@ export default function LoginSignup() {
             name="email"
             autoComplete="email"
             autoFocus
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
           />
           <TextField
             variant="outlined"
@@ -88,6 +121,10 @@ export default function LoginSignup() {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -114,6 +151,9 @@ export default function LoginSignup() {
               </Link>
             </Grid>
           </Grid>
+          <pre>
+            {JSON.stringify(formik.values, null, 4)}
+          </pre>
         </form>
       </div>
       <Box mt={8}>

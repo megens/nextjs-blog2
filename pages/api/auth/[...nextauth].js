@@ -28,29 +28,25 @@ const options = {
     jwt: true,
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
+  //https://next-auth.js.org/configuration/events
   events: {
     async signIn(message) {
       /* on successful sign in */
-      console.log(message);
     },
     async signOut(message) {
       /* on signout */
-      console.log(message);
     },
     async createUser(message) {
       /* user created */
-      console.log(message);
     },
     async linkAccount(message) {
       /* account linked to a user */
-      console.log(message);
     },
     async session(message) {
       /* session is active */
-      console.log(message);
     },
     async error(message) {
-      console.log(message);
+      /* error in authentication flow */
     },
   },
 };
