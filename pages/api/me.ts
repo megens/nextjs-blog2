@@ -1,9 +1,11 @@
 // https://dev.to/mgranados/how-to-build-a-simple-login-with-nextjs-and-react-hooks-255
+import { Secret } from "jsonwebtoken";
+import { NextApiRequest, NextApiResponse } from "next";
 
 const jwt = require("jsonwebtoken");
-const jwtSecret = process.env.JWTSECRET;
+const jwtSecret: Secret = process.env.JWTSECRET as Secret;
 
-export default (req, res) => {
+export default (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "GET") {
     if (!("token" in req.cookies)) {
       res.status(401).json({ message: "Unable to auth" });

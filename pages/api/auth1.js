@@ -87,9 +87,16 @@ export default async (req, res) => {
     ); // plain text password to bcrypt
     console.log("validPassword is ");
     console.log(validPassword);
-  }
+    if (validPassword === false)
+      // was !validPassword, but this is a bit riskier
+      return res.status(400).send("Invalid email or password.");
 
-  res.status(200).json({ token: true }); // TO DO: just token
+    const token = user.generateAuthToken();
+    console.log("sending token");
+    res.status(200).json({ token });
+    console.log("status: 200");
+    return;
+  }
 };
 
 /*
