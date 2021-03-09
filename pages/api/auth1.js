@@ -5,7 +5,7 @@ import dbConnect from "../../util/mongooseConnect";
 import mongoose from "mongoose";
 import _ from "lodash";
 import Joi from "joi";
-//const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
 
 import { NextApiRequest, NextApiResponse } from "next";
 
@@ -80,10 +80,16 @@ export default async (req, res) => {
       return res.status(400).send("Invalid email or password.");
     }
 
-    //
+    // I suspect this bcrypt line is where this is all falling apart. Am I using bcrypt correctly?
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    ); // plain text password to bcrypt
+    console.log("validPassword is ");
+    console.log(validPassword);
   }
 
-  res.status(200).json({ token: true });
+  res.status(200).json({ token: true }); // TO DO: just token
 };
 
 /*
