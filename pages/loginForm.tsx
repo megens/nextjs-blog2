@@ -108,7 +108,7 @@ export default function Login() {
           //set cookie
           console.log("token");
           console.log("setting a cookie");
-          //cookie.set("token", data.token, { expires: 2 }); // TO DO uncomment this
+          cookie.set("token", data.token, { expires: 2 }); // TO DO uncomment this
           Router.push("/my-profile/dashboard");
         }
         console.log("something else");

@@ -2,7 +2,7 @@
 
 import { MongoClient } from "mongodb";
 import assert from "assert";
-import bcrypt from "bcrypt";
+const bcrypt = require("bcryptjs");
 import { v4 } from "uuid";
 import jwt from "jsonwebtoken";
 
