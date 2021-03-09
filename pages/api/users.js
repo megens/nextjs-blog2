@@ -7,7 +7,7 @@ import _ from "lodash";
 
 import { MongoClient } from "mongodb";
 import assert from "assert";
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 import { v4 } from "uuid";
 // import jwt from "jsonwebtoken";
 

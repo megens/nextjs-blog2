@@ -5,7 +5,7 @@ import dbConnect from "../../util/mongooseConnect";
 import mongoose from "mongoose";
 import _ from "lodash";
 import Joi from "joi";
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 import { NextApiRequest, NextApiResponse } from "next";
 
