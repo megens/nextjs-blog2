@@ -14,6 +14,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, createStyles } from "@material-ui/styles";
 import Container from "@material-ui/core/Container";
+import fetch from "isomorphic-unfetch";
 
 import { useTheme, Theme } from "@material-ui/core/styles";
 
@@ -31,6 +32,7 @@ import Router from "next/router";
 import cookie from "js-cookie";
 
 import { object, string, number, boolean } from "yup";
+import { cookieProperties } from "../util/cookieProperties";
 
 function Copyright() {
   return (
@@ -68,7 +70,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const initialValues: LoginFormTypes = {
-  email: "g3@g.com",
+  email: "g3@g.com", // TO DO reset to empty strings
   password: "Password1",
 };
 
@@ -77,13 +79,14 @@ export default function Login() {
 
   // handleSubmit must be a promise in order to use isSubmitting
   function handleSubmit(
+    // request token from api/auth
     values: LoginFormTypes,
     formikHelpers: FormikHelpers<LoginFormTypes>
-  ): any {
+  ) {
     console.log("------");
     console.log(values);
     console.log(values.email);
-    fetch("/api/auth1", {
+    fetch("/api/auth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -108,7 +111,7 @@ export default function Login() {
           //set cookie
           console.log("token");
           console.log("setting a cookie");
-          cookie.set("token", data.token, { expires: 2 }); // TO DO uncomment this
+          cookie.set("token", data.token, cookieProperties); // TO DO uncomment this
           Router.push("/my-profile/dashboard");
         }
         console.log("something else");
@@ -133,13 +136,6 @@ export default function Login() {
           })}
           initialValues={initialValues}
           onSubmit={handleSubmit}
-          /*
-           onSubmit={(values, formikHelpers) => {
-            console.log(values);
-            console.log(formikHelpers);
-            console.log("------");
-            }}
-          */
         >
           {({ values, errors, isSubmitting }) => (
             <Form className={classes.form}>

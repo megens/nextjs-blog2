@@ -43,7 +43,9 @@ export interface UserType extends mongoose.Document {
 }
 
 UserSchema.methods.generateAuthToken = function (this: UserType) {
-  const token = jwt.sign({ _id: this._id, email: this.email }, jwtSecret);
+  const token = jwt.sign({ _id: this._id, email: this.email }, jwtSecret, {
+    expiresIn: "24h",
+  });
   return token;
 };
 

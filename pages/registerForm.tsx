@@ -14,8 +14,10 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, createStyles } from "@material-ui/styles";
 import Container from "@material-ui/core/Container";
+import fetch from "isomorphic-unfetch";
 
 import { useTheme, Theme } from "@material-ui/core/styles";
+import { cookieProperties } from "../util/cookieProperties";
 
 import {
   Formik,
@@ -102,7 +104,7 @@ export default function Login() {
         if (data && data.token) {
           //set cookie
           console.log("setting a cookie");
-          cookie.set("token", data.token, { expires: 2 });
+          cookie.set("token", data.token, cookieProperties);
           Router.push("/my-profile/dashboard");
         }
       });
