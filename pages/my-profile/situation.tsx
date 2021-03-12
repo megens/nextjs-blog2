@@ -6,8 +6,6 @@ import useSWR from "swr";
 import Link from "next/link";
 import cookie from "cookie";
 
-import authenticated from "../../utils/authenticator";
-
 function Situation() {
   console.log("start");
 
@@ -22,4 +20,5 @@ function Situation() {
   );
 }
 
-export default authenticated(Situation);
+//export default authenticated(Situation);
+export default Situation;
