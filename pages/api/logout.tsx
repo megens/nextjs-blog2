@@ -39,7 +39,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       secure: process.env.NODE_ENV !== "development",
       sameSite: "strict",
       path: "/",
-      maxAge: 3600,
+      maxAge: -1,
     })
   );
   res.send({ message: "logged out" });
