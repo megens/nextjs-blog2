@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import Router from "next/router";
-import cookie from "js-cookie";
-import fetch from 'isomorphic-unfetch'
+//import cookie from "js-cookie";
+import fetch from "isomorphic-unfetch";
 
 const Signup = () => {
   const [signupError, setSignupError] = useState("");
@@ -30,7 +30,7 @@ const Signup = () => {
         }
         if (data && data.token) {
           //set cookie
-          cookie.set("token", data.token, { expires: 2 });
+          //cookie.set("token", data.token, { expires: 2 });
           Router.push("/");
         }
       });

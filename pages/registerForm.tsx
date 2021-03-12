@@ -29,7 +29,7 @@ import {
 import { RegisterFormTypes } from "../types/customTypes";
 
 import Router from "next/router";
-import cookie from "js-cookie";
+//import cookie from "js-cookie";
 
 import { object, string, number, boolean, ref } from "yup";
 
@@ -103,7 +103,7 @@ export default function Login() {
         if (data && data.token) {
           //set cookie
           console.log("setting a cookie");
-          cookie.set("token", data.token, { sameSite: "strict" });
+          //cookie.set("token", data.token, { sameSite: "strict" });
           Router.push("/my-profile/dashboard");
         }
       });

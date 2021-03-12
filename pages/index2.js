@@ -4,7 +4,7 @@ import Head from "next/head";
 import fetch from "isomorphic-unfetch";
 import useSWR from "swr";
 import Link from "next/link";
-import cookie from "js-cookie";
+//import cookie from "js-cookie";
 
 function Home() {
   const { data, revalidate } = useSWR("/api/me", async function (args) {
@@ -30,7 +30,7 @@ function Home() {
           <p>Welcome {data.email}!</p>
           <button
             onClick={() => {
-              cookie.remove("token");
+              //cookie.remove("token");
               revalidate();
             }}
           >

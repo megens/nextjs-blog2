@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import Router from "next/router";
-import cookie from "js-cookie";
-import fetch from 'isomorphic-unfetch'
+import cookie from "cookie";
+import fetch from "isomorphic-unfetch";
 
 const Login = () => {
   const [loginError, setLoginError] = useState("");

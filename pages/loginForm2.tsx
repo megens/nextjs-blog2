@@ -21,7 +21,7 @@ import { Formik, Form, Field, useField, FormikProps } from "formik";
 import { LoginFormTypes } from "../types/customTypes";
 
 import Router from "next/router";
-import cookie from "js-cookie";
+//import cookie from "js-cookie";
 
 import { object, string, number, boolean } from "yup";
 
