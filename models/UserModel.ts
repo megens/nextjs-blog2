@@ -44,8 +44,9 @@ export interface UserType extends mongoose.Document {
 
 UserSchema.methods.generateAuthToken = function (this: UserType) {
   const token = jwt.sign({ _id: this._id, email: this.email }, jwtSecret, {
-    expiresIn: "24h",
+    expiresIn: "1h",
   });
+
   return token;
 };
 
@@ -60,33 +61,7 @@ function validate(user: UserType) {
   return joiSchema.validate(user);
 }
 
-//mongoose.models = {};
-// this solves the error of "cannot overwrite model" ... is this more or less elegant than below? TO DO
-
 const User =
   mongoose.models.User || mongoose.model<UserType>("User", UserSchema, "users"); // collection name is third parameter
 
 export { User, validate };
-
-// replaces this
-// https://stackoverflow.com/questions/62440264/mongoose-nextjs-model-is-not-defined-cannot-overwrite-model-once-compiled
-/*
-UserSchema.pre("save", async function () {
-  try {
-    const User = this.constructor;
-    const userExists = await User.find({
-      userName: this.get("name"),
-    })
-      .lean() // for speed, skip hydration
-      .exec();
-    if (userExists.length > 0) {
-      throw new Error("User exists. User model already created"); //errorHandler.errors.REGISTER_USERNAME_EXISTS
-    }
-  } catch (err) {
-    throw new Error("User exists. User model already created"); //errorHandler.errors.REGISTER_USERNAME_EXISTS
-  }
-});
-//const User = mongoose.model("User", UserSchema);
-
-module.exports = mongoose.models.User || mongoose.model("User", UserSchema);
-*/

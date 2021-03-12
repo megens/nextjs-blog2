@@ -17,7 +17,6 @@ import Container from "@material-ui/core/Container";
 import fetch from "isomorphic-unfetch";
 
 import { useTheme, Theme } from "@material-ui/core/styles";
-import { cookieProperties } from "../util/cookieProperties";
 
 import {
   Formik,
@@ -104,7 +103,7 @@ export default function Login() {
         if (data && data.token) {
           //set cookie
           console.log("setting a cookie");
-          cookie.set("token", data.token, cookieProperties);
+          cookie.set("token", data.token, { sameSite: "strict" });
           Router.push("/my-profile/dashboard");
         }
       });

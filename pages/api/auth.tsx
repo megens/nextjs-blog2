@@ -9,6 +9,8 @@ import { compare } from "bcryptjs";
 
 import { NextApiRequest, NextApiResponse } from "next";
 
+import cookie from "cookie";
+
 import { MongoClient } from "mongodb";
 import assert from "assert";
 
@@ -18,7 +20,7 @@ import { v4 } from "uuid";
 
 import { connectToDatabase } from "../../util/mongodb";
 
-function validate(reqBody) {
+function validate(reqBody: NextApiRequest) {
   console.log("validating sign in attempt ...");
   const joiSchema = Joi.object({
     email: Joi.string().min(3).max(255).required().email(),
@@ -27,7 +29,7 @@ function validate(reqBody) {
   return joiSchema.validate(reqBody);
 }
 
-export default async (req, res) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   console.log("about to dbConnect");
   await dbConnect();
   console.log("readyState");
@@ -61,8 +63,24 @@ export default async (req, res) => {
       return res.status(400).send("Invalid email or password.");
 
     const token = user.generateAuthToken();
-    res.status(200).json({ token });
+
+    res.setHeader(
+      "Set-Cookie",
+      cookie.serialize("auth", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== "development",
+        sameSite: "strict",
+        path: "/",
+        maxAge: 3600,
+      })
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Welcome back.",
+    });
     console.log("status: 200");
+
     return;
   } else {
     console.log("this only accepts POST requests");

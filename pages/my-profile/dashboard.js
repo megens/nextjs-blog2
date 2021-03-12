@@ -4,7 +4,7 @@ import Head from "next/head";
 import fetch from "isomorphic-unfetch";
 import useSWR from "swr";
 import Link from "next/link";
-import cookie from "js-cookie";
+import cookie from "cookie";
 
 function Dashboard() {
   console.log("start");
@@ -40,8 +40,10 @@ function Dashboard() {
         <>
           <p>Welcome {data.email}!</p>
           <button
-            onClick={() => {
-              cookie.remove("token");
+            onClick={async () => {
+              //cookie.remove("token");
+              // make api call to remove cookie
+              await fetch("/api/logout");
               revalidate();
             }}
           >

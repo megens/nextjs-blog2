@@ -29,10 +29,9 @@ import {
 import { LoginFormTypes } from "../types/customTypes";
 
 import Router from "next/router";
-import cookie from "js-cookie";
+import cookie from "cookie";
 
 import { object, string, number, boolean } from "yup";
-import { cookieProperties } from "../util/cookieProperties";
 
 function Copyright() {
   return (
@@ -107,11 +106,22 @@ export default function Login() {
           console.log("error");
           console.log(data.message); // TO DO ... address this error!
         }
-        if (data && data.token) {
+        if (data && data.success) {
           //set cookie
           console.log("token");
           console.log("setting a cookie");
-          cookie.set("token", data.token, cookieProperties); // TO DO uncomment this
+
+          /*
+          //js-cookie approach was this ...
+          cookie.set("token", data.token, {
+            expires: 1,
+            //httpOnly: true,
+            //secure: false, //process.env.NODE_ENV !== "development",
+            sameSite: "strict",
+            //maxAge: 3600,
+            // path: "/",
+          }); // TO DO cookieProperties
+          */
           Router.push("/my-profile/dashboard");
         }
         console.log("something else");

@@ -11,8 +11,9 @@ This endpoint will return a list of 20 movies from our MongoDB database.
 The implementation for this route is as follows:
 */
 import { connectToDatabase } from "../../util/mongodb";
+import authenticated from "../../util/authenticator";
 
-export default async (req, res) => {
+const moviesApi = async (req, res) => {
   const { db } = await connectToDatabase();
 
   const movies = await db
@@ -24,3 +25,6 @@ export default async (req, res) => {
 
   res.json(movies);
 };
+
+export default authenticated(moviesApi);
+//export default moviesApi;
