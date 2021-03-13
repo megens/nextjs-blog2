@@ -31,10 +31,11 @@ function validate(reqBody: NextApiRequest) {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   console.log("about to logout");
+  const token = req.cookies.auth;
 
   res.setHeader(
     "Set-Cookie",
-    cookie.serialize("auth", "null", {
+    cookie.serialize("auth", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== "development",
       sameSite: "strict",
